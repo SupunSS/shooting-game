@@ -19,8 +19,18 @@ private:
     void render();
 
     sf::RenderWindow window;
-    sf::CircleShape player;
+    sf::Texture playerTexture;
+    sf::Sprite  playerSprite;
+    bool playerTextureValid = false;
+    sf::RectangleShape debugRect;
+    unsigned playerSampledAlpha = 255;
+    sf::Vector2f playerHalfSize{15.f,15.f};
     float playerSpeed = 200.f;
+    // movement flags (set via events for reliable input)
+    bool movingLeft = false;
+    bool movingRight = false;
+    bool movingUp = false;
+    bool movingDown = false;
 
     std::vector<Bullet> bullets;
     sf::Clock shootCooldown;

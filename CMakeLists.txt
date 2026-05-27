@@ -23,3 +23,8 @@ target_link_libraries(ShooterGame SFML::System SFML::Window SFML::Graphics SFML:
 add_custom_command(TARGET ShooterGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     "C:/lib/SFML/bin" $<TARGET_FILE_DIR:ShooterGame>)
+
+# Copy project assets to the executable output so runtime can load them via relative paths
+add_custom_command(TARGET ShooterGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/assets" $<TARGET_FILE_DIR:ShooterGame>/assets)
