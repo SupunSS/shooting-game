@@ -53,20 +53,36 @@ Game::Game()
             // Assign texture to sprite now that it's valid
             playerSprite.setTexture(playerTexture, true);
 
+            //set size of the ship
+            playerSprite.setScale({ 0.5f, 0.5f });
+
             // Center the origin based on texture size
             float w = static_cast<float>(texSize.x);
             float h = static_cast<float>(texSize.y);
+            float scale = 0.5f;
+
             playerSprite.setOrigin({ w / 2.f, h / 2.f });
             playerSprite.setPosition({ 240.f, 580.f });
-            playerHalfSize = { w/2.f, h/2.f };
+            playerHalfSize = { (w * scale) / 2.f, (h * scale) / 2.f };
 
             // prepare debug rectangle in case texture is invisible
-            debugRect.setSize({ w, h });
-            debugRect.setOrigin({ w / 2.f, h / 2.f });
+            debugRect.setSize({ w * scale, h * scale });
+            debugRect.setOrigin({ (w * scale) / 2.f, (h * scale) / 2.f });
             debugRect.setPosition(playerSprite.getPosition());
             if (playerSampledAlpha == 0) debugRect.setFillColor(sf::Color::Yellow);
             else debugRect.setFillColor(sf::Color::Magenta);
         }
+    }
+
+    const std::string bulletPath = "assets/Blullet/bullet_orb_blue.png";
+    if (!std::filesystem::exists(bulletPath)) {
+        std::cerr << "[Error] Asset not found: " << bulletPath << '\n';
+    } else if (!bulletTexture.loadFromFile(bulletPath)) {
+        std::cerr << "[Error] failed to load bullet orb image: " << bulletPath << "\n";
+    } else {
+        bulletTexture.setSmooth(false);
+        bulletTextureValid = true;
+        std::cout << "[Info] Loaded bullet orb texture successfully\n";
     }
 }
 
@@ -106,10 +122,18 @@ void Game::processEvents() {
                 float elapsed = shootCooldown.getElapsedTime().asSeconds();
                 if (elapsed > 0.25f) {
                     Bullet b;
-                    b.shape.setRadius(5.f);
-                    b.shape.setFillColor(sf::Color::Yellow);
-                    b.shape.setOrigin({ 5.f, 5.f });
-                    b.shape.setPosition(playerSprite.getPosition());
+                    b.shape.setRadius(bulletRadius);
+                    b.shape.setOrigin({ bulletRadius, bulletRadius });
+                    if (bulletTextureValid) {
+                        b.shape.setTexture(&bulletTexture, true);
+                        b.shape.setFillColor(sf::Color::White);
+                    } else {
+                        b.shape.setFillColor(sf::Color::Cyan);
+                    }
+                    sf::Vector2f tip = playerSprite.getPosition();
+                    tip.y -= playerHalfSize.y; // move up by half the ship height
+                    tip.y -= bulletRadius;
+                    b.shape.setPosition(tip);
                     bullets.push_back(b);
                     shootCooldown.restart();
                     std::cout << "[Info] Shot fired, total bullets: " << bullets.size() << "\n";
@@ -161,6 +185,32 @@ void Game::update(float dt) {
     }
 }
 
+void Game::drawGlowBullet(const Bullet& b) {
+    // Outer glow
+    sf::CircleShape outer = b.shape;
+    outer.setRadius(b.shape.getRadius() * 3.0f);
+    outer.setOrigin({ b.shape.getRadius() * 3.0f, b.shape.getRadius() * 3.0f });
+    outer.setPosition(b.shape.getPosition());
+    outer.setTexture(nullptr);
+    outer.setFillColor(sf::Color(100, 180, 255, 40));
+    window.draw(outer, sf::BlendAdd);
+
+    // Mid glow
+    sf::CircleShape mid = b.shape;
+    mid.setRadius(b.shape.getRadius() * 1.8f);
+    mid.setOrigin({ b.shape.getRadius() * 1.8f, b.shape.getRadius() * 1.8f });
+    mid.setPosition(b.shape.getPosition());
+    mid.setTexture(nullptr);
+    mid.setFillColor(sf::Color(150, 210, 255, 110));
+    window.draw(mid, sf::BlendAdd);
+
+    // Core — normal blend keeps the texture sharp
+    sf::CircleShape core = b.shape;
+    core.setFillColor(sf::Color(255, 255, 255, 255));
+    window.draw(core); // <-- no BlendAdd
+}
+
+
 void Game::render() {
     window.clear(sf::Color::Black);
     if (playerTextureValid) {
@@ -170,7 +220,7 @@ void Game::render() {
         debugRect.setPosition(playerSprite.getPosition());
         window.draw(debugRect);
     }
-    for (auto& b : bullets)
-        window.draw(b.shape);
+     for (auto& b : bullets)
+        drawGlowBullet(b);
     window.display();
 }

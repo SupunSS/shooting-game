@@ -17,15 +17,19 @@ private:
     void processEvents();
     void update(float dt);
     void render();
+    void drawGlowBullet(const Bullet& b);
 
     sf::RenderWindow window;
     sf::Texture playerTexture;
     sf::Sprite  playerSprite;
     bool playerTextureValid = false;
     sf::RectangleShape debugRect;
+    sf::Texture bulletTexture;
+    bool bulletTextureValid = false;
     unsigned playerSampledAlpha = 255;
     sf::Vector2f playerHalfSize{15.f,15.f};
     float playerSpeed = 200.f;
+    float bulletRadius = 3.f;
     // movement flags (set via events for reliable input)
     bool movingLeft = false;
     bool movingRight = false;
