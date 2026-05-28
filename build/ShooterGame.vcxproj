@@ -457,6 +457,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D:\Projects\shooting game\src\Game.cpp" />
+    <ClCompile Include="D:\Projects\shooting game\src\GameAssets.cpp" />
+    <ClCompile Include="D:\Projects\shooting game\src\GameEnemies.cpp" />
+    <ClCompile Include="D:\Projects\shooting game\src\GameInput.cpp" />
+    <ClCompile Include="D:\Projects\shooting game\src\GameRender.cpp" />
+    <ClCompile Include="D:\Projects\shooting game\src\GameUpdate.cpp" />
     <ClCompile Include="D:\Projects\shooting game\src\main.cpp" />
   </ItemGroup>
   <ItemGroup />
