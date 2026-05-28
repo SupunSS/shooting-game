@@ -7,28 +7,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Audio::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Audio-Debug-dcfe3047d2fdfd54b5dc.json",
+					"jsonFile" : "target-SFML__Audio-Debug-e1c24e825fd56c16ec22.json",
 					"name" : "SFML::Audio",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Graphics::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Graphics-Debug-3a92cac246c5e82732a8.json",
+					"jsonFile" : "target-SFML__Graphics-Debug-40f2e3ebcc95e2951c1e.json",
 					"name" : "SFML::Graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::System::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__System-Debug-fbeac7b7810288c82b74.json",
+					"jsonFile" : "target-SFML__System-Debug-de538198b3147839ea9e.json",
 					"name" : "SFML::System",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Window::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Window-Debug-dc822eea3fa900c785e6.json",
+					"jsonFile" : "target-SFML__Window-Debug-20fa258a7eb56456728e.json",
 					"name" : "SFML::Window",
 					"projectIndex" : 0
 				}
@@ -95,7 +95,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ShooterGame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ShooterGame-Debug-15ba4dc5910621819e1b.json",
+					"jsonFile" : "target-ShooterGame-Debug-170f3c0c88854cd85d7e.json",
 					"name" : "ShooterGame",
 					"projectIndex" : 0
 				},
@@ -114,28 +114,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Audio::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Audio-Release-ac7eff12dffe10c10c6f.json",
+					"jsonFile" : "target-SFML__Audio-Release-957160ffb78c524eaacd.json",
 					"name" : "SFML::Audio",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Graphics::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Graphics-Release-362a2d9ac4dc00da664c.json",
+					"jsonFile" : "target-SFML__Graphics-Release-5dda8687ffa8f7a59550.json",
 					"name" : "SFML::Graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::System::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__System-Release-b5b353ca93bd78b5a908.json",
+					"jsonFile" : "target-SFML__System-Release-d4f996ce3ca8978dd43a.json",
 					"name" : "SFML::System",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Window::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Window-Release-34f391cc29eff4d7fc71.json",
+					"jsonFile" : "target-SFML__Window-Release-14f77e942f37a480633e.json",
 					"name" : "SFML::Window",
 					"projectIndex" : 0
 				}
@@ -202,7 +202,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ShooterGame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ShooterGame-Release-fbc119b774ebf3578d7f.json",
+					"jsonFile" : "target-ShooterGame-Release-808fb2193459e2769bb1.json",
 					"name" : "ShooterGame",
 					"projectIndex" : 0
 				},
@@ -221,28 +221,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Audio::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Audio-MinSizeRel-dcfe3047d2fdfd54b5dc.json",
+					"jsonFile" : "target-SFML__Audio-MinSizeRel-e1c24e825fd56c16ec22.json",
 					"name" : "SFML::Audio",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Graphics::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Graphics-MinSizeRel-3a92cac246c5e82732a8.json",
+					"jsonFile" : "target-SFML__Graphics-MinSizeRel-40f2e3ebcc95e2951c1e.json",
 					"name" : "SFML::Graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::System::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__System-MinSizeRel-fbeac7b7810288c82b74.json",
+					"jsonFile" : "target-SFML__System-MinSizeRel-de538198b3147839ea9e.json",
 					"name" : "SFML::System",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Window::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Window-MinSizeRel-dc822eea3fa900c785e6.json",
+					"jsonFile" : "target-SFML__Window-MinSizeRel-20fa258a7eb56456728e.json",
 					"name" : "SFML::Window",
 					"projectIndex" : 0
 				}
@@ -309,7 +309,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ShooterGame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ShooterGame-MinSizeRel-981f69286ccede08228a.json",
+					"jsonFile" : "target-ShooterGame-MinSizeRel-0db66ae1d8e988792bf3.json",
 					"name" : "ShooterGame",
 					"projectIndex" : 0
 				},
@@ -328,28 +328,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Audio::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Audio-RelWithDebInfo-dcfe3047d2fdfd54b5dc.json",
+					"jsonFile" : "target-SFML__Audio-RelWithDebInfo-e1c24e825fd56c16ec22.json",
 					"name" : "SFML::Audio",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Graphics::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Graphics-RelWithDebInfo-3a92cac246c5e82732a8.json",
+					"jsonFile" : "target-SFML__Graphics-RelWithDebInfo-40f2e3ebcc95e2951c1e.json",
 					"name" : "SFML::Graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::System::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__System-RelWithDebInfo-fbeac7b7810288c82b74.json",
+					"jsonFile" : "target-SFML__System-RelWithDebInfo-de538198b3147839ea9e.json",
 					"name" : "SFML::System",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "SFML::Window::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-SFML__Window-RelWithDebInfo-dc822eea3fa900c785e6.json",
+					"jsonFile" : "target-SFML__Window-RelWithDebInfo-20fa258a7eb56456728e.json",
 					"name" : "SFML::Window",
 					"projectIndex" : 0
 				}
@@ -416,7 +416,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ShooterGame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ShooterGame-RelWithDebInfo-4dfd6ef2dcaed2cac283.json",
+					"jsonFile" : "target-ShooterGame-RelWithDebInfo-a3ead84a2e04ffc7a770.json",
 					"name" : "ShooterGame",
 					"projectIndex" : 0
 				},

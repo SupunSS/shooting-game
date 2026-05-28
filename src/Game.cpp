@@ -5,7 +5,7 @@
 #include <cmath>
 
 Game::Game()
-    : window(sf::VideoMode({ 480u, 640u }), "Nokia Shooter")
+    : window(sf::VideoMode({ 480u, 640u }), "Space Shooter")
     , playerSprite(playerTexture) {
 
     window.setFramerateLimit(60);
