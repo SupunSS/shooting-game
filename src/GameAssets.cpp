@@ -3,6 +3,26 @@
 #include <iostream>
 #include <string>
 
+void Game::loadBackgroundAssets() {
+    const std::string backgroundPaths[backgroundCount] = {
+        "assets/background/background_image_1.png",
+        "assets/background/background_image_2.png",
+        "assets/background/background_image_3.png"
+    };
+
+    for (int i = 0; i < backgroundCount; i++) {
+        if (!std::filesystem::exists(backgroundPaths[i])) {
+            std::cerr << "[Error] Background asset not found: " << backgroundPaths[i] << '\n';
+        } else if (!backgroundTextures[i].loadFromFile(backgroundPaths[i])) {
+            std::cerr << "[Error] Failed to load background: " << backgroundPaths[i] << '\n';
+        } else {
+            backgroundTextures[i].setSmooth(true);
+            backgroundTexturesValid[i] = true;
+            std::cout << "[Info] Loaded background: " << backgroundPaths[i] << '\n';
+        }
+    }
+}
+
 void Game::loadPlayerAssets() {
     const std::string shipPath = "assets/Ships/player_ship.png";
     if (!std::filesystem::exists(shipPath)) {

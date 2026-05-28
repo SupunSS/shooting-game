@@ -1,5 +1,54 @@
 #include "Game.h"
 
+float Game::getBackgroundScale(const sf::Texture& texture) const {
+    sf::Vector2u textureSize = texture.getSize();
+    if (textureSize.x == 0) {
+        return 1.f;
+    }
+
+    return gameWidth / static_cast<float>(textureSize.x);
+}
+
+float Game::getBackgroundHeight(const sf::Texture& texture) const {
+    sf::Vector2u textureSize = texture.getSize();
+    return static_cast<float>(textureSize.y) * getBackgroundScale(texture);
+}
+
+void Game::drawBackground() {
+    float totalBackgroundHeight = 0.f;
+    for (int i = 0; i < backgroundCount; i++) {
+        if (backgroundTexturesValid[i]) {
+            totalBackgroundHeight += getBackgroundHeight(backgroundTextures[i]);
+        }
+    }
+
+    if (totalBackgroundHeight <= 0.f) {
+        return;
+    }
+
+    float y = backgroundScrollOffset - totalBackgroundHeight;
+    while (y < gameHeight) {
+        for (int i = 0; i < backgroundCount && y < gameHeight; i++) {
+            if (!backgroundTexturesValid[i]) {
+                continue;
+            }
+
+            sf::Texture& texture = backgroundTextures[i];
+            float scale = getBackgroundScale(texture);
+            float height = getBackgroundHeight(texture);
+
+            if (y + height > 0.f) {
+                sf::Sprite background(texture);
+                background.setScale({ scale, scale });
+                background.setPosition({ 0.f, y });
+                window.draw(background);
+            }
+
+            y += height;
+        }
+    }
+}
+
 void Game::drawGlowBullet(const Bullet& b) {
     sf::CircleShape outer = b.shape;
     outer.setRadius(b.shape.getRadius() * 3.0f);
@@ -54,6 +103,8 @@ void Game::drawGlowEnemyBullet(const EnemyBullet& b) {
 void Game::render() {
     window.clear(sf::Color::Black);
     window.setView(gameView);
+
+    drawBackground();
 
     for (auto& e : enemies)
         window.draw(e.sprite);

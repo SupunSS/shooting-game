@@ -44,6 +44,7 @@ public:
     void run();
 
 private:
+    void loadBackgroundAssets();
     void loadPlayerAssets();
     void loadBulletAssets();
     void loadEnemyAssets();
@@ -51,17 +52,29 @@ private:
 
     void processEvents();
     void update(float dt);
+    void updateBackground(float dt);
     void render();
+    void drawBackground();
     void drawGlowBullet(const Bullet& b);
     void drawGlowEnemyBullet(const EnemyBullet& b);
     void spawnEnemy();
     void updateView();
 
+    float getBackgroundScale(const sf::Texture& texture) const;
+    float getBackgroundHeight(const sf::Texture& texture) const;
+
     static constexpr float gameWidth  = 480.f;
     static constexpr float gameHeight = 640.f;
+    static constexpr int backgroundCount = 3;
 
     sf::RenderWindow   window;
     sf::View           gameView;
+
+    // Background
+    sf::Texture backgroundTextures[backgroundCount];
+    bool        backgroundTexturesValid[backgroundCount] = { false, false, false };
+    float       backgroundScrollOffset = 0.f;
+    float       backgroundScrollSpeed = 180.f;
 
     // Player
     sf::Texture        playerTexture;

@@ -4,6 +4,8 @@
 #include <iostream>
 
 void Game::update(float dt) {
+    updateBackground(dt);
+
     // ---- Player movement ----
     sf::Vector2f move(0.f, 0.f);
     if (movingLeft)  move.x -= playerSpeed * dt;
@@ -128,4 +130,20 @@ void Game::update(float dt) {
         std::cout << "[Info] Wave cleared! Next wave in "
                   << enemySpawnInterval << "s\n";
     }
+}
+
+void Game::updateBackground(float dt) {
+    float totalBackgroundHeight = 0.f;
+    for (int i = 0; i < backgroundCount; i++) {
+        if (backgroundTexturesValid[i]) {
+            totalBackgroundHeight += getBackgroundHeight(backgroundTextures[i]);
+        }
+    }
+
+    if (totalBackgroundHeight <= 0.f) {
+        return;
+    }
+
+    backgroundScrollOffset += backgroundScrollSpeed * dt;
+    backgroundScrollOffset = std::fmod(backgroundScrollOffset, totalBackgroundHeight);
 }

@@ -20,6 +20,7 @@ Game::Game()
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
+    loadBackgroundAssets();
     loadPlayerAssets();
     loadBulletAssets();
     loadEnemyAssets();
