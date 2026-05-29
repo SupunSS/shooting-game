@@ -1,4 +1,6 @@
 #include "Game.h"
+#include <algorithm>
+#include <string>
 
 float Game::getBackgroundScale(const sf::Texture& texture) const {
     sf::Vector2u textureSize = texture.getSize();
@@ -122,5 +124,67 @@ void Game::render() {
     for (auto& eb : enemyBullets)
         drawGlowEnemyBullet(eb);
 
+    drawHUD();
+
     window.display();
+}
+
+void Game::drawHUD() {
+    // ---- Health icons (bottom left) ----
+    for (int i = 0; i < 3; i++) {
+        float x = healthHudX + i * (healthIconWidth + healthIconGap);
+
+        bool isFull = (i < playerHealth);
+
+        sf::Texture& tex = isFull ? healthFullTexture : healthDepletedTexture;
+        bool         valid = isFull ? healthFullValid : healthDepletedValid;
+
+        if (valid) {
+            sf::Sprite icon(tex);
+
+            // Scale to the configured health icon size.
+            auto texSize = tex.getSize();
+            float scaleX = healthIconWidth / static_cast<float>(texSize.x);
+            float scaleY = healthIconHeight / static_cast<float>(texSize.y);
+            icon.setScale({ scaleX, scaleY });
+            icon.setPosition({ x, healthHudY });
+            window.draw(icon);
+        } else {
+            // Fallback circles if texture missing
+            float fallbackRadius = std::min(healthIconWidth, healthIconHeight) / 2.f;
+            sf::CircleShape fallback(fallbackRadius);
+            fallback.setOrigin({ fallbackRadius, fallbackRadius });
+            fallback.setPosition({ x + healthIconWidth / 2.f, healthHudY + healthIconHeight / 2.f });
+            fallback.setFillColor(isFull
+                ? sf::Color(220, 50, 80)
+                : sf::Color(60, 60, 60));
+            window.draw(fallback);
+        }
+    }
+
+    // ---- Score icon + number (bottom right) ----
+    if (scoreIconValid) {
+        sf::Sprite scoreIcon(scoreTexture);
+        auto texSize = scoreTexture.getSize();
+        float scaleX = scoreIconWidth / static_cast<float>(texSize.x);
+        float scaleY = scoreIconHeight / static_cast<float>(texSize.y);
+        scoreIcon.setScale({ scaleX, scaleY });
+        scoreIcon.setPosition({ scoreHudX, scoreHudY });
+        window.draw(scoreIcon);
+    }
+
+    if (hudFontValid) {
+        sf::Text scoreText(hudFont);
+        scoreText.setString(std::to_string(score));
+        scoreText.setCharacterSize(scoreTextSize);
+        scoreText.setFillColor(sf::Color::White);
+        scoreText.setPosition({ scoreHudX + scoreIconWidth + 8.f, scoreHudY });
+        window.draw(scoreText);
+    } else {
+        // Fallback score background when no font is available.
+        sf::RectangleShape scoreBg({ 70.f, scoreIconHeight });
+        scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
+        scoreBg.setPosition({ scoreHudX + scoreIconWidth + 4.f, scoreHudY });
+        window.draw(scoreBg);
+    }
 }

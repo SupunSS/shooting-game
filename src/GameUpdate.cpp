@@ -123,6 +123,25 @@ void Game::update(float dt) {
             return e.sprite.getPosition().y > gameHeight + 30.f;
         }), enemies.end());
 
+    // ---- Collision detection ----
+    checkCollisions();
+
+    // ---- Player invincibility timer after being hit ----
+    if (playerInvincible) {
+        invincibleTimer  += dt;
+        playerFlashTimer += dt;
+
+        bool flashOn = static_cast<int>(playerFlashTimer * 12.f) % 2 == 0;
+        playerSprite.setColor(flashOn ? sf::Color::White : sf::Color(255, 255, 255, 90));
+
+        if (invincibleTimer >= invincibleDuration) {
+            playerInvincible = false;
+            invincibleTimer = 0.f;
+            playerFlashTimer = 0.f;
+            playerSprite.setColor(sf::Color::White);
+        }
+    }
+
     // ---- Check if wave is cleared ----
     if (waveActive && enemies.empty()) {
         waveActive = false;

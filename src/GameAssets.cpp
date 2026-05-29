@@ -120,3 +120,46 @@ void Game::loadEnemyBulletAssets() {
         std::cout << "[Info] Loaded enemy bullet texture\n";
     }
 }
+
+void Game::loadUIAssets() {
+    // Full health point
+    if (!std::filesystem::exists("assets/ui/full_health_point.png")) {
+        std::cerr << "[Error] UI asset not found: full_health_point.png\n";
+    } else if (!healthFullTexture.loadFromFile("assets/ui/full_health_point.png")) {
+        std::cerr << "[Error] Failed to load full_health_point.png\n";
+    } else {
+        healthFullTexture.setSmooth(false);
+        healthFullValid = true;
+        std::cout << "[Info] Loaded full_health_point.png\n";
+    }
+
+    // Depleted health point
+    if (!std::filesystem::exists("assets/ui/depleted_health_point.png")) {
+        std::cerr << "[Error] UI asset not found: depleted_health_point.png\n";
+    } else if (!healthDepletedTexture.loadFromFile("assets/ui/depleted_health_point.png")) {
+        std::cerr << "[Error] Failed to load depleted_health_point.png\n";
+    } else {
+        healthDepletedTexture.setSmooth(false);
+        healthDepletedValid = true;
+        std::cout << "[Info] Loaded depleted_health_point.png\n";
+    }
+
+    // Score icon
+    if (!std::filesystem::exists("assets/ui/score.png")) {
+        std::cerr << "[Error] UI asset not found: score.png\n";
+    } else if (!scoreTexture.loadFromFile("assets/ui/score.png")) {
+        std::cerr << "[Error] Failed to load score.png\n";
+    } else {
+        scoreTexture.setSmooth(false);
+        scoreIconValid = true;
+        std::cout << "[Info] Loaded score.png\n";
+    }
+
+    // Font for score number
+    if (hudFont.openFromFile("assets/ui/font.ttf")) {
+        hudFontValid = true;
+        std::cout << "[Info] HUD font loaded\n";
+    } else {
+        std::cerr << "[Warning] No font found at assets/ui/font.ttf\n";
+    }
+}

@@ -25,6 +25,7 @@ Game::Game()
     loadBulletAssets();
     loadEnemyAssets();
     loadEnemyBulletAssets();
+    loadUIAssets();
 
     updateView();
 

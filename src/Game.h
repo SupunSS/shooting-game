@@ -5,6 +5,7 @@
 struct Bullet {
     sf::CircleShape shape;
     float speed = 500.f;
+    bool dead = false;
 };
 
 struct EnemyBullet {
@@ -14,6 +15,7 @@ struct EnemyBullet {
     sf::Sprite   sprite;
     sf::Vector2f velocity{ 0.f, 300.f };
     float        radius = 5.f;
+    bool         dead   = false;
 };
 
 struct Enemy {
@@ -36,6 +38,7 @@ struct Enemy {
     float       baseY         = 0.f;
     bool        reachedBase   = false;
     float       radius        = 18.f;
+    bool        dead          = false;
 };
 
 class Game {
@@ -49,6 +52,7 @@ private:
     void loadBulletAssets();
     void loadEnemyAssets();
     void loadEnemyBulletAssets();
+    void loadUIAssets();
 
     void processEvents();
     void update(float dt);
@@ -59,9 +63,13 @@ private:
     void drawGlowEnemyBullet(const EnemyBullet& b);
     void spawnEnemy();
     void updateView();
+    void drawHUD();
 
     float getBackgroundScale(const sf::Texture& texture) const;
     float getBackgroundHeight(const sf::Texture& texture) const;
+    // Collision helpers
+    bool circlesOverlap(sf::Vector2f posA, float rA, sf::Vector2f posB, float rB) const;
+    void checkCollisions();
 
     static constexpr float gameWidth  = 480.f;
     static constexpr float gameHeight = 640.f;
@@ -96,6 +104,13 @@ private:
     std::vector<Bullet> bullets;
     sf::Clock           shootCooldown;
 
+    // Player health
+    int   playerHealth       = 3;
+    bool  playerInvincible   = false;
+    float invincibleTimer    = 0.f;
+    float invincibleDuration = 2.f;
+    float playerFlashTimer   = 0.f;
+
     // Enemies
     std::vector<Enemy>       enemies;
     std::vector<EnemyBullet> enemyBullets;
@@ -112,4 +127,29 @@ private:
     // Enemy bullet texture
     sf::Texture enemyBulletTexture;
     bool        enemyBulletTextureValid = false;
+
+    // HUD / UI
+    sf::Texture healthFullTexture;
+    sf::Texture healthDepletedTexture;
+    sf::Texture scoreTexture;
+    bool        healthFullValid     = false;
+    bool        healthDepletedValid = false;
+    bool        scoreIconValid      = false;
+    int         score               = 0;
+    sf::Font    hudFont;
+    bool        hudFontValid        = false;
+
+    // HUD layout - To adjust values 
+    float healthHudX      = 10.f;
+    float healthHudY      = gameHeight - 34.f;
+    float healthIconWidth = 24.f;
+    float healthIconHeight = 24.f;
+    float healthIconGap   = 8.f;
+
+    float scoreHudX       = gameWidth - 120.f;
+    float scoreHudY       = gameHeight - 54.f;
+    float scoreIconWidth  = 48.f;
+    float scoreIconHeight = 48.f;
+    unsigned int scoreTextSize = 20;
+
 };
