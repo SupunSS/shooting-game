@@ -4,10 +4,8 @@
 
 float Game::getBackgroundScale(const sf::Texture& texture) const {
     sf::Vector2u textureSize = texture.getSize();
-    if (textureSize.x == 0) {
+    if (textureSize.x == 0)
         return 1.f;
-    }
-
     return gameWidth / static_cast<float>(textureSize.x);
 }
 
@@ -18,25 +16,21 @@ float Game::getBackgroundHeight(const sf::Texture& texture) const {
 
 void Game::drawBackground() {
     float totalBackgroundHeight = 0.f;
-    for (int i = 0; i < backgroundCount; i++) {
-        if (backgroundTexturesValid[i]) {
+    for (int i = 0; i < backgroundCount; i++)
+        if (backgroundTexturesValid[i])
             totalBackgroundHeight += getBackgroundHeight(backgroundTextures[i]);
-        }
-    }
 
-    if (totalBackgroundHeight <= 0.f) {
+    if (totalBackgroundHeight <= 0.f)
         return;
-    }
 
     float y = backgroundScrollOffset - totalBackgroundHeight;
     while (y < gameHeight) {
         for (int i = 0; i < backgroundCount && y < gameHeight; i++) {
-            if (!backgroundTexturesValid[i]) {
+            if (!backgroundTexturesValid[i])
                 continue;
-            }
 
             sf::Texture& texture = backgroundTextures[i];
-            float scale = getBackgroundScale(texture);
+            float scale  = getBackgroundScale(texture);
             float height = getBackgroundHeight(texture);
 
             if (y + height > 0.f) {
@@ -106,20 +100,20 @@ void Game::render() {
     window.clear(sf::Color::Black);
     window.setView(gameView);
 
-    // Main menu — draw and return early
+    // ---- Main menu — draw and return early ----
     if (gameState == GameState::MainMenu) {
         mainMenu.drawMainMenu(window);
         window.display();
         return;
     }
 
-    // Always draw game world underneath all overlays
+    // ---- Always draw game world underneath all overlays ----
     drawBackground();
 
     for (auto& e : enemies)
         window.draw(e.sprite);
 
-    // Player with blink when invincible
+    // Player — setColor in update() handles the blink effect
     if (playerTextureValid)
         window.draw(playerSprite);
     else {
@@ -133,18 +127,16 @@ void Game::render() {
     for (auto& eb : enemyBullets)
         drawGlowEnemyBullet(eb);
 
-    // HUD always visible during play, pause, and game over
+    // ---- HUD always visible ----
     drawHUD();
 
-    // Pause button — only shown during active gameplay
+    // ---- State-specific overlays ----
     if (gameState == GameState::Playing)
         mainMenu.drawPauseButton(window);
 
-    // Pause overlay
     if (gameState == GameState::Paused)
         mainMenu.drawPauseOverlay(window, score);
 
-    // Game over overlay
     if (gameState == GameState::GameOver)
         mainMenu.drawGameOver(window, score);
 
@@ -154,29 +146,26 @@ void Game::render() {
 void Game::drawHUD() {
     // ---- Health icons (bottom left) ----
     for (int i = 0; i < 3; i++) {
-        float x = healthHudX + i * (healthIconWidth + healthIconGap);
-
+        float x    = healthHudX + i * (healthIconWidth + healthIconGap);
         bool isFull = (i < playerHealth);
 
-        sf::Texture& tex = isFull ? healthFullTexture : healthDepletedTexture;
-        bool         valid = isFull ? healthFullValid : healthDepletedValid;
+        sf::Texture& tex   = isFull ? healthFullTexture : healthDepletedTexture;
+        bool         valid = isFull ? healthFullValid    : healthDepletedValid;
 
         if (valid) {
             sf::Sprite icon(tex);
-
-            // Scale to the configured health icon size.
             auto texSize = tex.getSize();
-            float scaleX = healthIconWidth / static_cast<float>(texSize.x);
-            float scaleY = healthIconHeight / static_cast<float>(texSize.y);
-            icon.setScale({ scaleX, scaleY });
+            icon.setScale({
+                healthIconWidth  / static_cast<float>(texSize.x),
+                healthIconHeight / static_cast<float>(texSize.y) });
             icon.setPosition({ x, healthHudY });
             window.draw(icon);
         } else {
-            // Fallback circles if texture missing
             float fallbackRadius = std::min(healthIconWidth, healthIconHeight) / 2.f;
             sf::CircleShape fallback(fallbackRadius);
             fallback.setOrigin({ fallbackRadius, fallbackRadius });
-            fallback.setPosition({ x + healthIconWidth / 2.f, healthHudY + healthIconHeight / 2.f });
+            fallback.setPosition({ x + healthIconWidth / 2.f,
+                                   healthHudY + healthIconHeight / 2.f });
             fallback.setFillColor(isFull
                 ? sf::Color(220, 50, 80)
                 : sf::Color(60, 60, 60));
@@ -188,9 +177,9 @@ void Game::drawHUD() {
     if (scoreIconValid) {
         sf::Sprite scoreIcon(scoreTexture);
         auto texSize = scoreTexture.getSize();
-        float scaleX = scoreIconWidth / static_cast<float>(texSize.x);
-        float scaleY = scoreIconHeight / static_cast<float>(texSize.y);
-        scoreIcon.setScale({ scaleX, scaleY });
+        scoreIcon.setScale({
+            scoreIconWidth  / static_cast<float>(texSize.x),
+            scoreIconHeight / static_cast<float>(texSize.y) });
         scoreIcon.setPosition({ scoreHudX, scoreHudY });
         window.draw(scoreIcon);
     }
@@ -203,11 +192,9 @@ void Game::drawHUD() {
         scoreText.setPosition({ scoreHudX + scoreIconWidth + 8.f, scoreHudY });
         window.draw(scoreText);
     } else {
-        // Fallback score background when no font is available.
         sf::RectangleShape scoreBg({ 70.f, scoreIconHeight });
         scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
         scoreBg.setPosition({ scoreHudX + scoreIconWidth + 4.f, scoreHudY });
         window.draw(scoreBg);
     }
-}
-
+}l
