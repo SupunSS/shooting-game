@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "MainMenu.h"
 
 struct Bullet {
     sf::CircleShape shape;
@@ -64,6 +65,8 @@ private:
     void spawnEnemy();
     void updateView();
     void drawHUD();
+
+    void resetGame();
 
     float getBackgroundScale(const sf::Texture& texture) const;
     float getBackgroundHeight(const sf::Texture& texture) const;
@@ -151,5 +154,15 @@ private:
     float scoreIconWidth  = 48.f;
     float scoreIconHeight = 48.f;
     unsigned int scoreTextSize = 20;
+
+    // Game State
+    GameState gameState = GameState::MainMenu;
+
+    // Menu
+    MainMenu mainMenu;
+
+    // Game Over / Score display
+    float gameOverTimer = 0.f;
+    int finalScore = 0;
 
 };

@@ -27,6 +27,10 @@ Game::Game()
     loadEnemyBulletAssets();
     loadUIAssets();
 
+    // Initialize and load menu
+    mainMenu.initialize(gameWidth, gameHeight, &hudFont, hudFontValid);
+    mainMenu.loadAssets();
+
     updateView();
 
     waveBoundaryY = gameHeight * 0.45f;
@@ -71,4 +75,35 @@ void Game::updateView() {
     gameView.setSize({ gameWidth, gameHeight });
     gameView.setViewport(sf::FloatRect({ viewportLeft, viewportTop }, { viewportWidth, viewportHeight }));
     window.setView(gameView);
+}
+
+void Game::resetGame() {
+    // Reset game state
+    playerHealth = 3;
+    score = 0;
+    finalScore = 0;
+    playerInvincible = false;
+    invincibleTimer = 0.f;
+    playerFlashTimer = 0.f;
+    
+    // Reset player position
+    playerSprite.setPosition({ 240.f, 580.f });
+    movingLeft = false;
+    movingRight = false;
+    movingUp = false;
+    movingDown = false;
+    
+    // Clear bullets and enemies
+    bullets.clear();
+    enemies.clear();
+    enemyBullets.clear();
+    
+    // Reset background
+    backgroundScrollOffset = 0.f;
+    
+    // Reset enemy spawn
+    enemySpawnTimer.restart();
+    waveActive = false;
+    
+    std::cout << "[Info] Game reset\n";
 }

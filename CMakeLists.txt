@@ -19,7 +19,8 @@ endif()
 message(STATUS "Collected source files: ${SOURCES}")
 
 add_executable(ShooterGame ${SOURCES}
-    src/Gamecollision.cpp)
+    src/Gamecollision.cpp
+    src/MainMenu.cpp)
 
 target_link_libraries(ShooterGame SFML::System SFML::Window SFML::Graphics SFML::Audio)
 

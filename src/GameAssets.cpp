@@ -7,7 +7,7 @@ void Game::loadBackgroundAssets() {
     const std::string backgroundPaths[backgroundCount] = {
         "assets/background/background_image_1.png",
         "assets/background/background_image_2.png",
-        "assets/background/background_image_3.png"
+        "assets/background/background_image_3.png",
     };
 
     for (int i = 0; i < backgroundCount; i++) {

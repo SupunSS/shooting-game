@@ -1,8 +1,17 @@
 ================================================================================
 Linker Errors
-Generated: 2026-05-28T09:53:01.184Z
-Total Errors: 1
+Generated: 2026-05-29T08:21:08.675Z
+Total Errors: 4
 ================================================================================
 
-[LNK1168] (MSVC)
-cannot open D:\Projects\shooting game\build\Debug\ShooterGame.exe for writing [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+[LNK2019] (MSVC)
+unresolved external symbol "private: void __cdecl Game::resetGame(void)" (?resetGame@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::processEvents(void)" (?processEvents@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK2019] (MSVC)
+unresolved external symbol "private: void __cdecl Game::drawMainMenu(void)" (?drawMainMenu@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::render(void)" (?render@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK2019] (MSVC)
+unresolved external symbol "private: void __cdecl Game::drawGameOver(void)" (?drawGameOver@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::render(void)" (?render@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK1120] (MSVC)
+3 unresolved externals [D:\Projects\shooting game\build\ShooterGame.vcxproj]

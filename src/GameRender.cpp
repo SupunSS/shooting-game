@@ -106,25 +106,34 @@ void Game::render() {
     window.clear(sf::Color::Black);
     window.setView(gameView);
 
-    drawBackground();
-
-    for (auto& e : enemies)
-        window.draw(e.sprite);
-
-    if (playerTextureValid)
-        window.draw(playerSprite);
-    else {
-        debugRect.setPosition(playerSprite.getPosition());
-        window.draw(debugRect);
+    if (gameState == GameState::MainMenu) {
+        mainMenu.drawMainMenu(window);
     }
+    else if (gameState == GameState::Playing) {
+        drawBackground();
 
-    for (auto& b : bullets)
-        drawGlowBullet(b);
+        for (auto& e : enemies)
+            window.draw(e.sprite);
 
-    for (auto& eb : enemyBullets)
-        drawGlowEnemyBullet(eb);
+        if (playerTextureValid)
+            window.draw(playerSprite);
+        else {
+            debugRect.setPosition(playerSprite.getPosition());
+            window.draw(debugRect);
+        }
 
-    drawHUD();
+        for (auto& b : bullets)
+            drawGlowBullet(b);
+
+        for (auto& eb : enemyBullets)
+            drawGlowEnemyBullet(eb);
+
+        drawHUD();
+    }
+    else if (gameState == GameState::GameOver) {
+        drawBackground();
+        mainMenu.drawGameOver(window, finalScore);
+    }
 
     window.display();
 }
@@ -188,3 +197,4 @@ void Game::drawHUD() {
         window.draw(scoreBg);
     }
 }
+

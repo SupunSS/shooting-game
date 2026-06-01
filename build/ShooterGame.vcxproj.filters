@@ -22,6 +22,9 @@
     <ClCompile Include="D:\Projects\shooting game\src\Gamecollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Projects\shooting game\src\MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Projects\shooting game\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

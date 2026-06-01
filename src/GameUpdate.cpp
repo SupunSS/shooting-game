@@ -4,6 +4,12 @@
 #include <iostream>
 
 void Game::update(float dt) {
+    // Only update game logic when playing
+    if (gameState != GameState::Playing) {
+        updateBackground(dt);
+        return;
+    }
+
     updateBackground(dt);
 
     // ---- Player movement ----
@@ -148,6 +154,13 @@ void Game::update(float dt) {
         enemySpawnTimer.restart();
         std::cout << "[Info] Wave cleared! Next wave in "
                   << enemySpawnInterval << "s\n";
+    }
+
+    // ---- Check for game over ----
+    if (gameState == GameState::Playing && playerHealth <= 0) {
+        finalScore = score;
+        gameState = GameState::GameOver;
+        std::cout << "[Info] Game Over! Final Score: " << finalScore << "\n";
     }
 }
 
