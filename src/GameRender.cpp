@@ -106,34 +106,47 @@ void Game::render() {
     window.clear(sf::Color::Black);
     window.setView(gameView);
 
+    // Main menu — draw and return early
     if (gameState == GameState::MainMenu) {
         mainMenu.drawMainMenu(window);
+        window.display();
+        return;
     }
-    else if (gameState == GameState::Playing) {
-        drawBackground();
 
-        for (auto& e : enemies)
-            window.draw(e.sprite);
+    // Always draw game world underneath all overlays
+    drawBackground();
 
-        if (playerTextureValid)
-            window.draw(playerSprite);
-        else {
-            debugRect.setPosition(playerSprite.getPosition());
-            window.draw(debugRect);
-        }
+    for (auto& e : enemies)
+        window.draw(e.sprite);
 
-        for (auto& b : bullets)
-            drawGlowBullet(b);
-
-        for (auto& eb : enemyBullets)
-            drawGlowEnemyBullet(eb);
-
-        drawHUD();
+    // Player with blink when invincible
+    if (playerTextureValid)
+        window.draw(playerSprite);
+    else {
+        debugRect.setPosition(playerSprite.getPosition());
+        window.draw(debugRect);
     }
-    else if (gameState == GameState::GameOver) {
-        drawBackground();
-        mainMenu.drawGameOver(window, finalScore);
-    }
+
+    for (auto& b : bullets)
+        drawGlowBullet(b);
+
+    for (auto& eb : enemyBullets)
+        drawGlowEnemyBullet(eb);
+
+    // HUD always visible during play, pause, and game over
+    drawHUD();
+
+    // Pause button — only shown during active gameplay
+    if (gameState == GameState::Playing)
+        mainMenu.drawPauseButton(window);
+
+    // Pause overlay
+    if (gameState == GameState::Paused)
+        mainMenu.drawPauseOverlay(window, score);
+
+    // Game over overlay
+    if (gameState == GameState::GameOver)
+        mainMenu.drawGameOver(window, score);
 
     window.display();
 }

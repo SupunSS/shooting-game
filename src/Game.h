@@ -78,6 +78,8 @@ private:
     static constexpr float gameHeight = 640.f;
     static constexpr int backgroundCount = 3;
 
+    static constexpr int scorePerKill = 10;
+
     sf::RenderWindow   window;
     sf::View           gameView;
 
@@ -157,6 +159,7 @@ private:
 
     // Game State
     GameState gameState = GameState::MainMenu;
+    GameState prevState = GameState::MainMenu;
 
     // Menu
     MainMenu mainMenu;

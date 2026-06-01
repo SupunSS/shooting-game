@@ -1,17 +1,11 @@
 ================================================================================
 Linker Errors
-Generated: 2026-05-29T08:21:08.675Z
-Total Errors: 4
+Generated: 2026-06-01T05:11:02.324Z
+Total Errors: 2
 ================================================================================
 
 [LNK2019] (MSVC)
-unresolved external symbol "private: void __cdecl Game::resetGame(void)" (?resetGame@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::processEvents(void)" (?processEvents@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
-
-[LNK2019] (MSVC)
-unresolved external symbol "private: void __cdecl Game::drawMainMenu(void)" (?drawMainMenu@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::render(void)" (?render@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
-
-[LNK2019] (MSVC)
-unresolved external symbol "private: void __cdecl Game::drawGameOver(void)" (?drawGameOver@Game@@AEAAXXZ) referenced in function "private: void __cdecl Game::render(void)" (?render@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+unresolved external symbol "private: void __cdecl Game::updateBackground(float)" (?updateBackground@Game@@AEAAXM@Z) referenced in function "private: void __cdecl Game::update(float)" (?update@Game@@AEAAXM@Z) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
 
 [LNK1120] (MSVC)
-3 unresolved externals [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+1 unresolved externals [D:\Projects\shooting game\build\ShooterGame.vcxproj]

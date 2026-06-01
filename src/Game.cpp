@@ -78,32 +78,20 @@ void Game::updateView() {
 }
 
 void Game::resetGame() {
-    // Reset game state
-    playerHealth = 3;
-    score = 0;
-    finalScore = 0;
-    playerInvincible = false;
-    invincibleTimer = 0.f;
-    playerFlashTimer = 0.f;
-    
-    // Reset player position
-    playerSprite.setPosition({ 240.f, 580.f });
-    movingLeft = false;
-    movingRight = false;
-    movingUp = false;
-    movingDown = false;
-    
-    // Clear bullets and enemies
     bullets.clear();
-    enemies.clear();
     enemyBullets.clear();
-    
-    // Reset background
-    backgroundScrollOffset = 0.f;
-    
-    // Reset enemy spawn
+    enemies.clear();
+    playerHealth     = 3;
+    score            = 0;
+    waveActive       = false;
+    playerInvincible = false;
+    invincibleTimer  = 0.f;
+    playerFlashTimer = 0.f;
+    movingLeft = movingRight = movingUp = movingDown = false;
     enemySpawnTimer.restart();
-    waveActive = false;
-    
+    shootCooldown.restart();
+    playerSprite.setPosition({ gameWidth / 2.f, gameHeight - 60.f });
+    playerSprite.setColor(sf::Color::White);
     std::cout << "[Info] Game reset\n";
 }
+
