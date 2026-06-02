@@ -109,27 +109,24 @@ void MainMenu::loadAssets() {
         std::cout << "[Info] Loaded main_menu_button.png\n";
     }
 
-    // ---- Pause button (in-game HUD button) ----
-if (std::filesystem::exists("assets/Menu/Paush_button.png") &&
-    pauseButtonTexture.loadFromFile("assets/Menu/Paush_button.png")) {
-    pauseButtonTexture.setSmooth(true);
-    pauseButtonValid = true;
-    pauseButton.sprite = new sf::Sprite(pauseButtonTexture);
-
-    float desiredSize    = 40.f;                          // visual size on screen
-    float clickboxSize   = 50.f;                          // slightly larger for easy clicking
-    pauseButton.size     = { clickboxSize, clickboxSize }; // <-- clickbox
-    pauseButton.position = { gameWidth - 40.f, 40.f };
-
-    pauseButton.sprite->setOrigin({
-        pauseButtonTexture.getSize().x / 2.f,
-        pauseButtonTexture.getSize().y / 2.f });
-    pauseButton.sprite->setPosition(pauseButton.position);
-
-    float pScale = desiredSize / static_cast<float>(pauseButtonTexture.getSize().x);
-    pauseButton.sprite->setScale({ pScale, pScale });
-    std::cout << "[Info] Loaded Paush_button.png\n";
-}
+    // ---- Pause button ----
+    if (std::filesystem::exists("assets/Menu/Paush_button.png") &&
+        pauseButtonTexture.loadFromFile("assets/Menu/Paush_button.png")) {
+        pauseButtonTexture.setSmooth(true);
+        pauseButtonValid = true;
+        pauseButton.sprite   = new sf::Sprite(pauseButtonTexture);
+        float desiredSize  = 40.f;
+        float clickboxSize = 50.f;
+        pauseButton.size     = { clickboxSize, clickboxSize };
+        pauseButton.position = { gameWidth - 40.f, 40.f };
+        pauseButton.sprite->setOrigin({
+            pauseButtonTexture.getSize().x / 2.f,
+            pauseButtonTexture.getSize().y / 2.f });
+        pauseButton.sprite->setPosition(pauseButton.position);
+        float pScale = desiredSize / static_cast<float>(pauseButtonTexture.getSize().x);
+        pauseButton.sprite->setScale({ pScale, pScale });
+        std::cout << "[Info] Loaded Paush_button.png\n";
+    }
 
     // ---- Paused title overlay image ----
     if (std::filesystem::exists("assets/Menu/paushed.png") &&
@@ -209,7 +206,6 @@ void MainMenu::updateButtonHover(const sf::Vector2f& mousePos, GameState gameSta
         retryButton.updateHover(mousePos);
         mainMenuButton.updateHover(mousePos);
     }
-    // pause button always active during Playing
     pauseButton.updateHover(mousePos);
 }
 
@@ -225,7 +221,6 @@ void MainMenu::drawMainMenu(sf::RenderWindow& window) {
         window.clear(sf::Color::Black);
     }
 
-    // Name / game title image
     if (nameTitleValid) {
         sf::Sprite nameSprite(nameTitleTexture);
         float s = (gameWidth * 0.7f) / static_cast<float>(nameTitleTexture.getSize().x);
@@ -255,12 +250,10 @@ void MainMenu::drawPauseButton(sf::RenderWindow& window) {
 
 // ---------------------------------------------------------------- drawPauseOverlay
 void MainMenu::drawPauseOverlay(sf::RenderWindow& window, int currentScore) {
-    // Dark overlay over the game
     sf::RectangleShape overlay({ gameWidth, gameHeight });
     overlay.setFillColor(sf::Color(0, 0, 0, 170));
     window.draw(overlay);
 
-    // Paused title image
     if (pausedTitleValid) {
         sf::Sprite pausedSprite(pausedTitleTexture);
         float s = (gameWidth * 0.6f) / static_cast<float>(pausedTitleTexture.getSize().x);
@@ -277,7 +270,6 @@ void MainMenu::drawPauseOverlay(sf::RenderWindow& window, int currentScore) {
         window.draw(t);
     }
 
-    // Current score during pause
     if (fontValid) {
         sf::Text sc(*font);
         sc.setString("SCORE: " + std::to_string(currentScore));
@@ -289,15 +281,12 @@ void MainMenu::drawPauseOverlay(sf::RenderWindow& window, int currentScore) {
         window.draw(sc);
     }
 
-    // Resume button
     if (resumeButtonValid && resumeButton.sprite) {
         resumeButton.updateScale(0.8f);
         window.draw(*resumeButton.sprite);
     }
 
-    // Main menu button (reused)
     if (mainMenuButtonValid && mainMenuButton.sprite) {
-        // reposition for pause screen
         mainMenuButton.position = { gameWidth / 2.f, gameHeight / 2.f + 100.f };
         mainMenuButton.sprite->setPosition(mainMenuButton.position);
         mainMenuButton.updateScale(0.75f);
@@ -311,7 +300,6 @@ void MainMenu::drawGameOver(sf::RenderWindow& window, int finalScore) {
     overlay.setFillColor(sf::Color(0, 0, 0, 160));
     window.draw(overlay);
 
-    // Game over image
     if (gameOverValid) {
         sf::Sprite goSprite(gameOverTexture);
         float s = (gameWidth * 0.7f) / static_cast<float>(gameOverTexture.getSize().x);
@@ -334,6 +322,7 @@ void MainMenu::drawGameOver(sf::RenderWindow& window, int finalScore) {
         retryButton.updateScale(0.75f);
         window.draw(*retryButton.sprite);
     }
+
     if (mainMenuButtonValid && mainMenuButton.sprite) {
         mainMenuButton.position = { gameWidth / 2.f + 80.f, gameHeight / 2.f + 120.f };
         mainMenuButton.sprite->setPosition(mainMenuButton.position);
@@ -342,23 +331,25 @@ void MainMenu::drawGameOver(sf::RenderWindow& window, int finalScore) {
     }
 }
 
-// ---------------------------------------------------------------- drawScore
+// ---------------------------------------------------------------- drawScore — ONE copy only
 void MainMenu::drawScore(sf::RenderWindow& window, int finalScore) {
     if (!fontValid) return;
 
     sf::Text label(*font);
     label.setString("FINAL SCORE");
-    label.setCharacterSize(24);
-    label.setFillColor(sf::Color::White);
+    label.setCharacterSize(20);
+    label.setFillColor(sf::Color(180, 180, 180));
     auto lb = label.getLocalBounds();
     label.setOrigin({ lb.size.x / 2.f, 0.f });
-    label.setPosition({ gameWidth / 2.f, gameHeight / 2.f - 40.f });
+    label.setPosition({ gameWidth / 2.f, gameHeight / 2.f - 20.f });
     window.draw(label);
 
     sf::Text val(*font);
     val.setString(std::to_string(finalScore));
-    val.setCharacterSize(52);
+    val.setCharacterSize(64);
     val.setFillColor(sf::Color::Cyan);
+    val.setOutlineThickness(2.f);
+    val.setOutlineColor(sf::Color(0, 80, 120));
     auto vb = val.getLocalBounds();
     val.setOrigin({ vb.size.x / 2.f, 0.f });
     val.setPosition({ gameWidth / 2.f, gameHeight / 2.f + 10.f });
@@ -366,9 +357,9 @@ void MainMenu::drawScore(sf::RenderWindow& window, int finalScore) {
 }
 
 // ---------------------------------------------------------------- simple getters
-bool MainMenu::isPauseButtonPressed(const sf::Vector2f& p) const  { return pauseButton.contains(p); }
-bool MainMenu::isResumeButtonPressed(const sf::Vector2f& p) const { return resumeButton.contains(p); }
-bool MainMenu::isPlayButtonPressed(const sf::Vector2f& p) const   { return playButton.contains(p); }
-bool MainMenu::isQuitButtonPressed(const sf::Vector2f& p) const   { return quitButton.contains(p); }
-bool MainMenu::isRetryButtonPressed(const sf::Vector2f& p) const  { return retryButton.contains(p); }
+bool MainMenu::isPauseButtonPressed(const sf::Vector2f& p) const   { return pauseButton.contains(p); }
+bool MainMenu::isResumeButtonPressed(const sf::Vector2f& p) const  { return resumeButton.contains(p); }
+bool MainMenu::isPlayButtonPressed(const sf::Vector2f& p) const    { return playButton.contains(p); }
+bool MainMenu::isQuitButtonPressed(const sf::Vector2f& p) const    { return quitButton.contains(p); }
+bool MainMenu::isRetryButtonPressed(const sf::Vector2f& p) const   { return retryButton.contains(p); }
 bool MainMenu::isMainMenuButtonPressed(const sf::Vector2f& p) const { return mainMenuButton.contains(p); }

@@ -138,7 +138,7 @@ void Game::render() {
         mainMenu.drawPauseOverlay(window, score);
 
     if (gameState == GameState::GameOver)
-        mainMenu.drawGameOver(window, score);
+        mainMenu.drawGameOver(window, finalScore);
 
     window.display();
 }
@@ -173,28 +173,24 @@ void Game::drawHUD() {
         }
     }
 
-    // ---- Score icon + number (bottom right) ----
-    if (scoreIconValid) {
-        sf::Sprite scoreIcon(scoreTexture);
-        auto texSize = scoreTexture.getSize();
-        scoreIcon.setScale({
-            scoreIconWidth  / static_cast<float>(texSize.x),
-            scoreIconHeight / static_cast<float>(texSize.y) });
-        scoreIcon.setPosition({ scoreHudX, scoreHudY });
-        window.draw(scoreIcon);
-    }
 
-    if (hudFontValid) {
-        sf::Text scoreText(hudFont);
-        scoreText.setString(std::to_string(score));
-        scoreText.setCharacterSize(scoreTextSize);
-        scoreText.setFillColor(sf::Color::White);
-        scoreText.setPosition({ scoreHudX + scoreIconWidth + 8.f, scoreHudY });
-        window.draw(scoreText);
-    } else {
-        sf::RectangleShape scoreBg({ 70.f, scoreIconHeight });
-        scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
-        scoreBg.setPosition({ scoreHudX + scoreIconWidth + 4.f, scoreHudY });
-        window.draw(scoreBg);
-    }
-}l
+// ---- Score (bottom right) — text only, no icon ----
+if (hudFontValid) {
+    sf::Text scoreText(hudFont);
+    scoreText.setString("SCORE: " + std::to_string(score));
+    scoreText.setCharacterSize(18);
+    scoreText.setFillColor(sf::Color::White);
+    
+    // Right align it
+    auto bounds = scoreText.getLocalBounds();
+    scoreText.setOrigin({ bounds.size.x, 0.f });
+    scoreText.setPosition({ gameWidth - 10.f, healthHudY });
+    window.draw(scoreText);
+} else {
+    // Fallback rectangle if no font
+    sf::RectangleShape scoreBg({ 100.f, 24.f });
+    scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
+    scoreBg.setPosition({ gameWidth - 110.f, healthHudY });
+    window.draw(scoreBg);
+}
+}

@@ -144,16 +144,6 @@ void Game::loadUIAssets() {
         std::cout << "[Info] Loaded depleted_health_point.png\n";
     }
 
-    // Score icon
-    if (!std::filesystem::exists("assets/ui/score.png")) {
-        std::cerr << "[Error] UI asset not found: score.png\n";
-    } else if (!scoreTexture.loadFromFile("assets/ui/score.png")) {
-        std::cerr << "[Error] Failed to load score.png\n";
-    } else {
-        scoreTexture.setSmooth(false);
-        scoreIconValid = true;
-        std::cout << "[Info] Loaded score.png\n";
-    }
 
     // Font for score number
     if (hudFont.openFromFile("assets/ui/font.ttf")) {

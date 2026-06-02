@@ -134,22 +134,20 @@ private:
     bool        enemyBulletTextureValid = false;
 
     // HUD / UI
-    sf::Texture healthFullTexture;
-    sf::Texture healthDepletedTexture;
-    sf::Texture scoreTexture;
-    bool        healthFullValid     = false;
-    bool        healthDepletedValid = false;
-    bool        scoreIconValid      = false;
-    int         score               = 0;
-    sf::Font    hudFont;
-    bool        hudFontValid        = false;
+sf::Texture healthFullTexture;
+sf::Texture healthDepletedTexture;
+bool        healthFullValid     = false;
+bool        healthDepletedValid = false;
+int         score               = 0;
+sf::Font    hudFont;
+bool        hudFontValid        = false;
 
-    // HUD layout - To adjust values 
-    float healthHudX      = 10.f;
-    float healthHudY      = gameHeight - 34.f;
-    float healthIconWidth = 24.f;
-    float healthIconHeight = 24.f;
-    float healthIconGap   = 8.f;
+// HUD layout
+float healthHudX       = 10.f;
+float healthHudY       = gameHeight - 34.f;
+float healthIconWidth  = 24.f;
+float healthIconHeight = 24.f;
+float healthIconGap    = 8.f;
 
     float scoreHudX       = gameWidth - 120.f;
     float scoreHudY       = gameHeight - 54.f;
