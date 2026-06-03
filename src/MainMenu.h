@@ -26,6 +26,7 @@ enum class GameState {
     MainMenu,
     Playing,
     Paused,
+    Settings,   // <-- capital S, was lowercase before
     GameOver
 };
 
@@ -47,6 +48,7 @@ public:
     void drawPauseButton(sf::RenderWindow& window);
     void drawPauseOverlay(sf::RenderWindow& window, int currentScore);
     void drawGameOver(sf::RenderWindow& window, int finalScore);
+    void drawSettings(sf::RenderWindow& window);
 
     bool isPauseButtonPressed(const sf::Vector2f& mousePos) const;
     bool isResumeButtonPressed(const sf::Vector2f& mousePos) const;
@@ -54,6 +56,25 @@ public:
     bool isQuitButtonPressed(const sf::Vector2f& mousePos) const;
     bool isRetryButtonPressed(const sf::Vector2f& mousePos) const;
     bool isMainMenuButtonPressed(const sf::Vector2f& mousePos) const;
+    bool isSettingsButtonPressed(const sf::Vector2f& mousePos) const;
+
+    // Toggle functions for settings screen
+    void toggleSound() { soundEnabled = !soundEnabled; }
+    void toggleMusic() { musicEnabled = !musicEnabled; }
+    bool getSoundEnabled() const { return soundEnabled; }
+    bool getMusicEnabled() const { return musicEnabled; }
+
+    // Key binding getters
+sf::Keyboard::Scancode getMoveLeftKey()  const { return keyMoveLeft;  }
+sf::Keyboard::Scancode getMoveRightKey() const { return keyMoveRight; }
+sf::Keyboard::Scancode getMoveUpKey()    const { return keyMoveUp;    }
+sf::Keyboard::Scancode getMoveDownKey()  const { return keyMoveDown;  }
+sf::Keyboard::Scancode getShootKey()     const { return keyShoot;     }
+
+// Called from GameInput when rebinding
+void startRebinding(int index) { rebindingIndex = index; }
+void applyRebind(sf::Keyboard::Scancode code);
+bool isRebinding() const { return rebindingIndex >= 0; }
 
 private:
     void drawScore(sf::RenderWindow& window, int finalScore);
@@ -62,6 +83,10 @@ private:
     float     gameHeight;
     sf::Font* font;
     bool      fontValid;
+
+    // Sound / music state
+    bool soundEnabled = true;
+    bool musicEnabled = true;
 
     // Background + title
     sf::Texture menuBackgroundTexture;
@@ -79,6 +104,7 @@ private:
     sf::Texture pauseButtonTexture;
     sf::Texture pausedTitleTexture;
     sf::Texture resumeButtonTexture;
+    sf::Texture settingsButtonTexture;
 
     bool playButtonValid     = false;
     bool quitButtonValid     = false;
@@ -87,6 +113,7 @@ private:
     bool pauseButtonValid    = false;
     bool pausedTitleValid    = false;
     bool resumeButtonValid   = false;
+    bool settingsButtonValid = false;
 
     Button playButton;
     Button quitButton;
@@ -94,4 +121,19 @@ private:
     Button mainMenuButton;
     Button pauseButton;
     Button resumeButton;
+    Button settingsButton;
+
+    // Key bindings
+sf::Keyboard::Scancode keyMoveLeft  = sf::Keyboard::Scancode::A;
+sf::Keyboard::Scancode keyMoveRight = sf::Keyboard::Scancode::D;
+sf::Keyboard::Scancode keyMoveUp    = sf::Keyboard::Scancode::W;
+sf::Keyboard::Scancode keyMoveDown  = sf::Keyboard::Scancode::S;
+sf::Keyboard::Scancode keyShoot     = sf::Keyboard::Scancode::Space;
+
+int rebindingIndex = -1; // -1 = not rebinding, 0-4 = which binding
+
+std::string scancodeToString(sf::Keyboard::Scancode code) const;
+
+int   conflictIndex = -1;  // which row is flashing red due to conflict
+float conflictTimer = 0.f; // countdown until flash clears
 };

@@ -100,20 +100,26 @@ void Game::render() {
     window.clear(sf::Color::Black);
     window.setView(gameView);
 
-    // ---- Main menu — draw and return early ----
+    // ---- Main menu ----
     if (gameState == GameState::MainMenu) {
         mainMenu.drawMainMenu(window);
         window.display();
         return;
     }
 
-    // ---- Always draw game world underneath all overlays ----
+    // ---- Settings screen ----
+    if (gameState == GameState::Settings) {
+        mainMenu.drawSettings(window);
+        window.display();
+        return;
+    }
+
+    // ---- Game world — always drawn underneath overlays ----
     drawBackground();
 
     for (auto& e : enemies)
         window.draw(e.sprite);
 
-    // Player — setColor in update() handles the blink effect
     if (playerTextureValid)
         window.draw(playerSprite);
     else {
@@ -127,10 +133,8 @@ void Game::render() {
     for (auto& eb : enemyBullets)
         drawGlowEnemyBullet(eb);
 
-    // ---- HUD always visible ----
     drawHUD();
 
-    // ---- State-specific overlays ----
     if (gameState == GameState::Playing)
         mainMenu.drawPauseButton(window);
 

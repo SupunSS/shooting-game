@@ -31,7 +31,6 @@ struct Enemy {
     float       zigzagTime    = 0.f;
     float       shootTimer    = 0.f;
     float       shootInterval = 2.f;
-
     float       phaseOffsetX  = 0.f;
     float       phaseOffsetY  = 0.f;
     float       zigzagSpeedX  = 0.f;
@@ -65,20 +64,17 @@ private:
     void spawnEnemy();
     void updateView();
     void drawHUD();
-
     void resetGame();
 
     float getBackgroundScale(const sf::Texture& texture) const;
     float getBackgroundHeight(const sf::Texture& texture) const;
-    // Collision helpers
     bool circlesOverlap(sf::Vector2f posA, float rA, sf::Vector2f posB, float rB) const;
     void checkCollisions();
 
-    static constexpr float gameWidth  = 480.f;
-    static constexpr float gameHeight = 640.f;
-    static constexpr int backgroundCount = 3;
-
-    static constexpr int scorePerKill = 10;
+    static constexpr float gameWidth   = 480.f;
+    static constexpr float gameHeight  = 640.f;
+    static constexpr int   backgroundCount = 3;
+    static constexpr int   scorePerKill    = 10;
 
     sf::RenderWindow   window;
     sf::View           gameView;
@@ -87,7 +83,7 @@ private:
     sf::Texture backgroundTextures[backgroundCount];
     bool        backgroundTexturesValid[backgroundCount] = { false, false, false };
     float       backgroundScrollOffset = 0.f;
-    float       backgroundScrollSpeed = 180.f;
+    float       backgroundScrollSpeed  = 180.f;
 
     // Player
     sf::Texture        playerTexture;
@@ -120,50 +116,40 @@ private:
     std::vector<Enemy>       enemies;
     std::vector<EnemyBullet> enemyBullets;
     sf::Clock                enemySpawnTimer;
-    float                    enemySpawnInterval     = 3.f;
-    bool                     waveActive             = false;
-    int                      enemiesPerWave         = 5;
-    float                    waveBoundaryY          = 0.f;
+    float                    enemySpawnInterval = 3.f;
+    bool                     waveActive         = false;
+    int                      enemiesPerWave      = 5;
+    float                    waveBoundaryY       = 0.f;
 
-    // Enemy textures - one per ship type
     sf::Texture enemyTextures[5];
     bool        enemyTexturesValid[5] = { false, false, false, false, false };
 
-    // Enemy bullet texture
     sf::Texture enemyBulletTexture;
     bool        enemyBulletTextureValid = false;
 
     // HUD / UI
-sf::Texture healthFullTexture;
-sf::Texture healthDepletedTexture;
-bool        healthFullValid     = false;
-bool        healthDepletedValid = false;
-int         score               = 0;
-sf::Font    hudFont;
-bool        hudFontValid        = false;
+    sf::Texture healthFullTexture;
+    sf::Texture healthDepletedTexture;
+    bool        healthFullValid     = false;
+    bool        healthDepletedValid = false;
+    int         score               = 0;
+    sf::Font    hudFont;
+    bool        hudFontValid        = false;
 
-// HUD layout
-float healthHudX       = 10.f;
-float healthHudY       = gameHeight - 34.f;
-float healthIconWidth  = 24.f;
-float healthIconHeight = 24.f;
-float healthIconGap    = 8.f;
+    // HUD layout
+    float        healthHudX       = 10.f;
+    float        healthHudY       = gameHeight - 34.f;
+    float        healthIconWidth  = 24.f;
+    float        healthIconHeight = 24.f;
+    float        healthIconGap    = 8.f;
 
-    float scoreHudX       = gameWidth - 120.f;
-    float scoreHudY       = gameHeight - 54.f;
-    float scoreIconWidth  = 48.f;
-    float scoreIconHeight = 48.f;
-    unsigned int scoreTextSize = 20;
-
-    // Game State
+    // Game state
     GameState gameState = GameState::MainMenu;
     GameState prevState = GameState::MainMenu;
 
     // Menu
     MainMenu mainMenu;
 
-    // Game Over / Score display
-    float gameOverTimer = 0.f;
+    // Game over
     int finalScore = 0;
-
 };
