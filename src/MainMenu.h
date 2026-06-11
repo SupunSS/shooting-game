@@ -26,7 +26,8 @@ enum class GameState {
     MainMenu,
     Playing,
     Paused,
-    Settings,   // <-- capital S, was lowercase before
+    Settings,
+    HighScores,   
     GameOver
 };
 
@@ -63,6 +64,10 @@ public:
     void toggleMusic() { musicEnabled = !musicEnabled; }
     bool getSoundEnabled() const { return soundEnabled; }
     bool getMusicEnabled() const { return musicEnabled; }
+
+    void drawHighScores(sf::RenderWindow& window,
+                    const std::vector<int>& scores);
+bool isHighScoreButtonPressed(const sf::Vector2f& mousePos) const;
 
     // Key binding getters
 sf::Keyboard::Scancode getMoveLeftKey()  const { return keyMoveLeft;  }
@@ -136,4 +141,8 @@ std::string scancodeToString(sf::Keyboard::Scancode code) const;
 
 int   conflictIndex = -1;  // which row is flashing red due to conflict
 float conflictTimer = 0.f; // countdown until flash clears
+
+sf::Texture highScoreButtonTexture;
+bool        highScoreButtonValid = false;
+Button      highScoreButton;
 };

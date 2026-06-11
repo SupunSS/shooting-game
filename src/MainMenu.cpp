@@ -12,13 +12,14 @@ MainMenu::MainMenu(float width, float height, sf::Font* gameFont)
 }
 
 MainMenu::~MainMenu() {
-    if (playButton.sprite)     delete playButton.sprite;
-    if (quitButton.sprite)     delete quitButton.sprite;
-    if (retryButton.sprite)    delete retryButton.sprite;
-    if (mainMenuButton.sprite) delete mainMenuButton.sprite;
-    if (pauseButton.sprite)    delete pauseButton.sprite;
-    if (resumeButton.sprite)   delete resumeButton.sprite;
-    if (settingsButton.sprite) delete settingsButton.sprite; // <-- was missing
+    if (playButton.sprite)      delete playButton.sprite;
+    if (quitButton.sprite)      delete quitButton.sprite;
+    if (retryButton.sprite)     delete retryButton.sprite;
+    if (mainMenuButton.sprite)  delete mainMenuButton.sprite;
+    if (pauseButton.sprite)     delete pauseButton.sprite;
+    if (resumeButton.sprite)    delete resumeButton.sprite;
+    if (settingsButton.sprite)  delete settingsButton.sprite;
+    if (highScoreButton.sprite) delete highScoreButton.sprite;
 }
 
 void MainMenu::initialize(float width, float height, sf::Font* gameFont, bool fontLoaded) {
@@ -52,7 +53,7 @@ void MainMenu::loadAssets() {
         playButtonTexture.setSmooth(true);
         playButtonValid = true;
         playButton.sprite   = new sf::Sprite(playButtonTexture);
-        playButton.position = { gameWidth / 2.f, gameHeight / 2.f - 60.f };
+        playButton.position = { gameWidth / 2.f, gameHeight / 2.f - 100.f };
         playButton.size     = { 200.f, 80.f };
         playButton.sprite->setOrigin({
             playButtonTexture.getSize().x / 2.f,
@@ -68,7 +69,7 @@ void MainMenu::loadAssets() {
         settingsButtonTexture.setSmooth(true);
         settingsButtonValid = true;
         settingsButton.sprite   = new sf::Sprite(settingsButtonTexture);
-        settingsButton.position = { gameWidth / 2.f, gameHeight / 2.f + 40.f };
+        settingsButton.position = { gameWidth / 2.f, gameHeight / 2.f };
         settingsButton.size     = { 200.f, 80.f };
         settingsButton.sprite->setOrigin({
             settingsButtonTexture.getSize().x / 2.f,
@@ -78,13 +79,29 @@ void MainMenu::loadAssets() {
         std::cout << "[Info] Loaded settings_button.png\n";
     }
 
+    // ---- High score button ----
+    if (std::filesystem::exists("assets/Menu/High score.png") &&
+        highScoreButtonTexture.loadFromFile("assets/Menu/High score.png")) {
+        highScoreButtonTexture.setSmooth(true);
+        highScoreButtonValid = true;
+        highScoreButton.sprite   = new sf::Sprite(highScoreButtonTexture);
+        highScoreButton.position = { gameWidth / 2.f, gameHeight / 2.f + 100.f };
+        highScoreButton.size     = { 200.f, 80.f };
+        highScoreButton.sprite->setOrigin({
+            highScoreButtonTexture.getSize().x / 2.f,
+            highScoreButtonTexture.getSize().y / 2.f });
+        highScoreButton.sprite->setPosition(highScoreButton.position);
+        highScoreButton.sprite->setScale({ 0.8f, 0.8f });
+        std::cout << "[Info] Loaded High score.png\n";
+    }
+
     // ---- Quit button ----
     if (std::filesystem::exists("assets/Menu/quit_button.png") &&
         quitButtonTexture.loadFromFile("assets/Menu/quit_button.png")) {
         quitButtonTexture.setSmooth(true);
         quitButtonValid = true;
         quitButton.sprite   = new sf::Sprite(quitButtonTexture);
-        quitButton.position = { gameWidth / 2.f, gameHeight / 2.f + 140.f };
+        quitButton.position = { gameWidth / 2.f, gameHeight / 2.f + 200.f };
         quitButton.size     = { 200.f, 80.f };
         quitButton.sprite->setOrigin({
             quitButtonTexture.getSize().x / 2.f,
@@ -191,6 +208,10 @@ void MainMenu::handleMouseClick(const sf::Vector2f& mousePos,
             gameState = GameState::Settings;
             std::cout << "[Info] Settings clicked\n";
         }
+        if (highScoreButton.contains(mousePos)) {
+            gameState = GameState::HighScores;
+            std::cout << "[Info] High scores clicked\n";
+        }
         if (quitButton.contains(mousePos)) {
             window.close();
         }
@@ -220,6 +241,7 @@ void MainMenu::updateButtonHover(const sf::Vector2f& mousePos, GameState gameSta
     if (gameState == GameState::MainMenu) {
         playButton.updateHover(mousePos);
         settingsButton.updateHover(mousePos);
+        highScoreButton.updateHover(mousePos);
         quitButton.updateHover(mousePos);
     } else if (gameState == GameState::Paused) {
         resumeButton.updateHover(mousePos);
@@ -248,7 +270,7 @@ void MainMenu::drawMainMenu(sf::RenderWindow& window) {
         float s = (gameWidth * 0.7f) / static_cast<float>(nameTitleTexture.getSize().x);
         nameSprite.setScale({ s, s });
         float scaledW = nameTitleTexture.getSize().x * s;
-        nameSprite.setPosition({ (gameWidth - scaledW) / 2.f, gameHeight * 0.10f });
+        nameSprite.setPosition({ (gameWidth - scaledW) / 2.f, gameHeight * 0.08f });
         window.draw(nameSprite);
     }
 
@@ -259,6 +281,10 @@ void MainMenu::drawMainMenu(sf::RenderWindow& window) {
     if (settingsButtonValid && settingsButton.sprite) {
         settingsButton.updateScale(0.8f);
         window.draw(*settingsButton.sprite);
+    }
+    if (highScoreButtonValid && highScoreButton.sprite) {
+        highScoreButton.updateScale(0.8f);
+        window.draw(*highScoreButton.sprite);
     }
     if (quitButtonValid && quitButton.sprite) {
         quitButton.updateScale(0.8f);
@@ -386,107 +412,9 @@ void MainMenu::drawScore(sf::RenderWindow& window, int finalScore) {
     window.draw(val);
 }
 
-
-std::string MainMenu::scancodeToString(sf::Keyboard::Scancode code) const {
-    switch (code) {
-        case sf::Keyboard::Scancode::A:      return "A";
-        case sf::Keyboard::Scancode::B:      return "B";
-        case sf::Keyboard::Scancode::C:      return "C";
-        case sf::Keyboard::Scancode::D:      return "D";
-        case sf::Keyboard::Scancode::E:      return "E";
-        case sf::Keyboard::Scancode::F:      return "F";
-        case sf::Keyboard::Scancode::G:      return "G";
-        case sf::Keyboard::Scancode::H:      return "H";
-        case sf::Keyboard::Scancode::I:      return "I";
-        case sf::Keyboard::Scancode::J:      return "J";
-        case sf::Keyboard::Scancode::K:      return "K";
-        case sf::Keyboard::Scancode::L:      return "L";
-        case sf::Keyboard::Scancode::M:      return "M";
-        case sf::Keyboard::Scancode::N:      return "N";
-        case sf::Keyboard::Scancode::O:      return "O";
-        case sf::Keyboard::Scancode::P:      return "P";
-        case sf::Keyboard::Scancode::Q:      return "Q";
-        case sf::Keyboard::Scancode::R:      return "R";
-        case sf::Keyboard::Scancode::S:      return "S";
-        case sf::Keyboard::Scancode::T:      return "T";
-        case sf::Keyboard::Scancode::U:      return "U";
-        case sf::Keyboard::Scancode::V:      return "V";
-        case sf::Keyboard::Scancode::W:      return "W";
-        case sf::Keyboard::Scancode::X:      return "X";
-        case sf::Keyboard::Scancode::Y:      return "Y";
-        case sf::Keyboard::Scancode::Z:      return "Z";
-        case sf::Keyboard::Scancode::Num0:   return "0";
-        case sf::Keyboard::Scancode::Num1:   return "1";
-        case sf::Keyboard::Scancode::Num2:   return "2";
-        case sf::Keyboard::Scancode::Num3:   return "3";
-        case sf::Keyboard::Scancode::Num4:   return "4";
-        case sf::Keyboard::Scancode::Num5:   return "5";
-        case sf::Keyboard::Scancode::Num6:   return "6";
-        case sf::Keyboard::Scancode::Num7:   return "7";
-        case sf::Keyboard::Scancode::Num8:   return "8";
-        case sf::Keyboard::Scancode::Num9:   return "9";
-        case sf::Keyboard::Scancode::Space:  return "SPACE";
-        case sf::Keyboard::Scancode::Up:     return "UP";
-        case sf::Keyboard::Scancode::Down:   return "DOWN";
-        case sf::Keyboard::Scancode::Left:   return "LEFT";
-        case sf::Keyboard::Scancode::Right:  return "RIGHT";
-        case sf::Keyboard::Scancode::Enter:  return "ENTER";
-        case sf::Keyboard::Scancode::Tab:    return "TAB";
-        case sf::Keyboard::Scancode::LShift: return "LSHIFT";
-        case sf::Keyboard::Scancode::RShift: return "RSHIFT";
-        case sf::Keyboard::Scancode::LControl: return "LCTRL";
-        case sf::Keyboard::Scancode::LAlt:   return "LALT";
-        default:                             return "???";
-    }
-}
-
-void MainMenu::applyRebind(sf::Keyboard::Scancode code) {
-    // Block Escape — it's reserved for pause/menu
-    if (code == sf::Keyboard::Scancode::Escape) {
-        std::cout << "[Info] Escape is reserved and cannot be rebound\n";
-        rebindingIndex = -1;
-        return;
-    }
-
-    // Check if this key is already used by another binding
-    sf::Keyboard::Scancode allKeys[] = {
-        keyMoveLeft, keyMoveRight, keyMoveUp, keyMoveDown, keyShoot
-    };
-
-    for (int i = 0; i < 5; i++) {
-        if (i == rebindingIndex) continue; // skip the one we're currently rebinding
-        if (allKeys[i] == code) {
-            std::cout << "[Info] Key " << scancodeToString(code)
-                      << " is already used by control " << i << " — rejected\n";
-            // Flash the conflicting row — set a conflict flag
-            conflictIndex   = i;
-            conflictTimer   = 1.2f; // seconds to show the flash
-            return;           // don't apply, don't close rebind dialog yet
-        }
-    }
-
-    // Key is free — apply it
-    switch (rebindingIndex) {
-        case 0: keyMoveLeft  = code; break;
-        case 1: keyMoveRight = code; break;
-        case 2: keyMoveUp    = code; break;
-        case 3: keyMoveDown  = code; break;
-        case 4: keyShoot     = code; break;
-    }
-
-    std::cout << "[Info] Rebound control " << rebindingIndex
-              << " to " << scancodeToString(code) << "\n";
-    rebindingIndex = -1;
-}
-
-// ---------------------------------------------------------------- drawSettings
-void MainMenu::drawSettings(sf::RenderWindow& window) {
-
-    if (conflictTimer > 0.f)
-    conflictTimer -= 0.016f; // approx one frame at 60fps
-else
-    conflictIndex = -1;
-    // Background
+// ---------------------------------------------------------------- drawHighScores
+void MainMenu::drawHighScores(sf::RenderWindow& window,
+                               const std::vector<int>& scores) {
     if (menuBackgroundValid) {
         sf::Sprite bg(menuBackgroundTexture);
         float s = gameWidth / static_cast<float>(menuBackgroundTexture.getSize().x);
@@ -503,6 +431,205 @@ else
 
     // ---- Title ----
     sf::Text title(*font);
+    title.setString("HIGH SCORES");
+    title.setCharacterSize(22);
+    title.setFillColor(sf::Color::White);
+    auto tb = title.getLocalBounds();
+    title.setOrigin({ tb.size.x / 2.f, 0.f });
+    title.setPosition({ gameWidth / 2.f, 60.f });
+    window.draw(title);
+
+    sf::RectangleShape div({ gameWidth - 60.f, 2.f });
+    div.setFillColor(sf::Color(80, 80, 120));
+    div.setPosition({ 30.f, 104.f });
+    window.draw(div);
+
+    // ---- Score rows ----
+    if (scores.empty()) {
+        sf::Text empty(*font);
+        empty.setString("NO SCORES YET");
+        empty.setCharacterSize(14);
+        empty.setFillColor(sf::Color(120, 120, 120));
+        auto eb = empty.getLocalBounds();
+        empty.setOrigin({ eb.size.x / 2.f, 0.f });
+        empty.setPosition({ gameWidth / 2.f, 280.f });
+        window.draw(empty);
+    } else {
+        for (int i = 0; i < static_cast<int>(scores.size()); i++) {
+            float y = 130.f + i * 72.f;
+
+            // Row background
+            sf::RectangleShape row({ gameWidth - 80.f, 56.f });
+            sf::Color rowColor;
+            switch (i) {
+                case 0:  rowColor = sf::Color(120, 100, 20, 180); break;
+                case 1:  rowColor = sf::Color(80,  80,  90, 180); break;
+                case 2:  rowColor = sf::Color(100, 60,  30, 180); break;
+                default: rowColor = sf::Color(30,  30,  50, 180); break;
+            }
+            row.setFillColor(rowColor);
+            row.setOutlineThickness(1.f);
+            row.setOutlineColor(sf::Color(80, 80, 120));
+            row.setPosition({ 40.f, y });
+            window.draw(row);
+
+            // Rank
+            sf::Text rank(*font);
+            rank.setString("#" + std::to_string(i + 1));
+            rank.setCharacterSize(16);
+            sf::Color rankColor;
+            switch (i) {
+                case 0:  rankColor = sf::Color(255, 215, 0);   break;
+                case 1:  rankColor = sf::Color(192, 192, 192); break;
+                case 2:  rankColor = sf::Color(205, 127, 50);  break;
+                default: rankColor = sf::Color(160, 160, 160); break;
+            }
+            rank.setFillColor(rankColor);
+            rank.setPosition({ 60.f, y + 16.f });
+            window.draw(rank);
+
+            // Score value
+            sf::Text scoreText(*font);
+            scoreText.setString(std::to_string(scores[i]));
+            scoreText.setCharacterSize(20);
+            scoreText.setFillColor(sf::Color::Cyan);
+            auto sb = scoreText.getLocalBounds();
+            scoreText.setOrigin({ sb.size.x, 0.f });
+            scoreText.setPosition({ gameWidth - 60.f, y + 14.f });
+            window.draw(scoreText);
+        }
+    }
+
+    // ---- Back button ----
+    sf::RectangleShape backBox({ 160.f, 40.f });
+    backBox.setFillColor(sf::Color(30, 30, 60));
+    backBox.setOutlineThickness(2.f);
+    backBox.setOutlineColor(sf::Color(80, 80, 180));
+    backBox.setPosition({ gameWidth / 2.f - 80.f, gameHeight - 76.f });
+    window.draw(backBox);
+
+    sf::Text backText(*font);
+    backText.setString("BACK");
+    backText.setCharacterSize(13);
+    backText.setFillColor(sf::Color::White);
+    auto bb = backText.getLocalBounds();
+    backText.setOrigin({ bb.size.x / 2.f, 0.f });
+    backText.setPosition({ gameWidth / 2.f, gameHeight - 66.f });
+    window.draw(backText);
+}
+
+// ---------------------------------------------------------------- scancodeToString
+std::string MainMenu::scancodeToString(sf::Keyboard::Scancode code) const {
+    switch (code) {
+        case sf::Keyboard::Scancode::A:        return "A";
+        case sf::Keyboard::Scancode::B:        return "B";
+        case sf::Keyboard::Scancode::C:        return "C";
+        case sf::Keyboard::Scancode::D:        return "D";
+        case sf::Keyboard::Scancode::E:        return "E";
+        case sf::Keyboard::Scancode::F:        return "F";
+        case sf::Keyboard::Scancode::G:        return "G";
+        case sf::Keyboard::Scancode::H:        return "H";
+        case sf::Keyboard::Scancode::I:        return "I";
+        case sf::Keyboard::Scancode::J:        return "J";
+        case sf::Keyboard::Scancode::K:        return "K";
+        case sf::Keyboard::Scancode::L:        return "L";
+        case sf::Keyboard::Scancode::M:        return "M";
+        case sf::Keyboard::Scancode::N:        return "N";
+        case sf::Keyboard::Scancode::O:        return "O";
+        case sf::Keyboard::Scancode::P:        return "P";
+        case sf::Keyboard::Scancode::Q:        return "Q";
+        case sf::Keyboard::Scancode::R:        return "R";
+        case sf::Keyboard::Scancode::S:        return "S";
+        case sf::Keyboard::Scancode::T:        return "T";
+        case sf::Keyboard::Scancode::U:        return "U";
+        case sf::Keyboard::Scancode::V:        return "V";
+        case sf::Keyboard::Scancode::W:        return "W";
+        case sf::Keyboard::Scancode::X:        return "X";
+        case sf::Keyboard::Scancode::Y:        return "Y";
+        case sf::Keyboard::Scancode::Z:        return "Z";
+        case sf::Keyboard::Scancode::Num0:     return "0";
+        case sf::Keyboard::Scancode::Num1:     return "1";
+        case sf::Keyboard::Scancode::Num2:     return "2";
+        case sf::Keyboard::Scancode::Num3:     return "3";
+        case sf::Keyboard::Scancode::Num4:     return "4";
+        case sf::Keyboard::Scancode::Num5:     return "5";
+        case sf::Keyboard::Scancode::Num6:     return "6";
+        case sf::Keyboard::Scancode::Num7:     return "7";
+        case sf::Keyboard::Scancode::Num8:     return "8";
+        case sf::Keyboard::Scancode::Num9:     return "9";
+        case sf::Keyboard::Scancode::Space:    return "SPACE";
+        case sf::Keyboard::Scancode::Up:       return "UP";
+        case sf::Keyboard::Scancode::Down:     return "DOWN";
+        case sf::Keyboard::Scancode::Left:     return "LEFT";
+        case sf::Keyboard::Scancode::Right:    return "RIGHT";
+        case sf::Keyboard::Scancode::Enter:    return "ENTER";
+        case sf::Keyboard::Scancode::Tab:      return "TAB";
+        case sf::Keyboard::Scancode::LShift:   return "LSHIFT";
+        case sf::Keyboard::Scancode::RShift:   return "RSHIFT";
+        case sf::Keyboard::Scancode::LControl: return "LCTRL";
+        case sf::Keyboard::Scancode::LAlt:     return "LALT";
+        default:                               return "???";
+    }
+}
+
+// ---------------------------------------------------------------- applyRebind
+void MainMenu::applyRebind(sf::Keyboard::Scancode code) {
+    if (code == sf::Keyboard::Scancode::Escape) {
+        std::cout << "[Info] Escape is reserved\n";
+        rebindingIndex = -1;
+        return;
+    }
+
+    sf::Keyboard::Scancode allKeys[] = {
+        keyMoveLeft, keyMoveRight, keyMoveUp, keyMoveDown, keyShoot
+    };
+
+    for (int i = 0; i < 5; i++) {
+        if (i == rebindingIndex) continue;
+        if (allKeys[i] == code) {
+            std::cout << "[Info] Key " << scancodeToString(code)
+                      << " already used — rejected\n";
+            conflictIndex = i;
+            conflictTimer = 1.2f;
+            return;
+        }
+    }
+
+    switch (rebindingIndex) {
+        case 0: keyMoveLeft  = code; break;
+        case 1: keyMoveRight = code; break;
+        case 2: keyMoveUp    = code; break;
+        case 3: keyMoveDown  = code; break;
+        case 4: keyShoot     = code; break;
+    }
+
+    std::cout << "[Info] Rebound control " << rebindingIndex
+              << " to " << scancodeToString(code) << "\n";
+    rebindingIndex = -1;
+}
+
+// ---------------------------------------------------------------- drawSettings
+void MainMenu::drawSettings(sf::RenderWindow& window) {
+    // Tick conflict flash timer
+    if (conflictTimer > 0.f) conflictTimer -= 0.016f;
+    else                      conflictIndex  = -1;
+
+    if (menuBackgroundValid) {
+        sf::Sprite bg(menuBackgroundTexture);
+        float s = gameWidth / static_cast<float>(menuBackgroundTexture.getSize().x);
+        bg.setScale({ s, s });
+        bg.setPosition({ 0.f, 0.f });
+        window.draw(bg);
+    } else {
+        sf::RectangleShape bg({ gameWidth, gameHeight });
+        bg.setFillColor(sf::Color::Black);
+        window.draw(bg);
+    }
+
+    if (!fontValid) return;
+
+    // Title
+    sf::Text title(*font);
     title.setString("SETTINGS");
     title.setCharacterSize(24);
     title.setFillColor(sf::Color::White);
@@ -516,7 +643,7 @@ else
     div1.setPosition({ 30.f, 74.f });
     window.draw(div1);
 
-    // ---- Sound toggle ----
+    // Sound toggle
     sf::Text soundLabel(*font);
     soundLabel.setString("SOUND");
     soundLabel.setCharacterSize(13);
@@ -525,7 +652,7 @@ else
     window.draw(soundLabel);
 
     sf::RectangleShape soundBox({ 80.f, 30.f });
-    soundBox.setFillColor(soundEnabled ? sf::Color(40, 160, 80) : sf::Color(160, 40, 40));
+    soundBox.setFillColor(soundEnabled ? sf::Color(40,160,80) : sf::Color(160,40,40));
     soundBox.setPosition({ gameWidth - 130.f, 86.f });
     window.draw(soundBox);
 
@@ -538,7 +665,7 @@ else
     soundVal.setPosition({ gameWidth - 90.f, 93.f });
     window.draw(soundVal);
 
-    // ---- Music toggle ----
+    // Music toggle
     sf::Text musicLabel(*font);
     musicLabel.setString("MUSIC");
     musicLabel.setCharacterSize(13);
@@ -547,7 +674,7 @@ else
     window.draw(musicLabel);
 
     sf::RectangleShape musicBox({ 80.f, 30.f });
-    musicBox.setFillColor(musicEnabled ? sf::Color(40, 160, 80) : sf::Color(160, 40, 40));
+    musicBox.setFillColor(musicEnabled ? sf::Color(40,160,80) : sf::Color(160,40,40));
     musicBox.setPosition({ gameWidth - 130.f, 132.f });
     window.draw(musicBox);
 
@@ -565,7 +692,7 @@ else
     div2.setPosition({ 30.f, 178.f });
     window.draw(div2);
 
-    // ---- Controls title ----
+    // Controls title
     sf::Text ctrlTitle(*font);
     ctrlTitle.setString("CONTROLS");
     ctrlTitle.setCharacterSize(14);
@@ -580,7 +707,6 @@ else
     hint.setPosition({ 40.f, 218.f });
     window.draw(hint);
 
-    // ---- Controls rows ----
     const char* actionNames[] = {
         "MOVE LEFT", "MOVE RIGHT", "MOVE UP", "MOVE DOWN", "SHOOT"
     };
@@ -589,59 +715,51 @@ else
     };
 
     for (int i = 0; i < 5; i++) {
-    float y = 244.f + i * 46.f;
-    bool isBeingRebound  = (rebindingIndex == i);
-    bool isConflicting   = (conflictIndex  == i);
+        float y = 244.f + i * 46.f;
+        bool isBeingRebound = (rebindingIndex == i);
+        bool isConflicting  = (conflictIndex  == i);
 
-    // Action label
-    sf::Text action(*font);
-    action.setString(actionNames[i]);
-    action.setCharacterSize(11);
-    action.setFillColor(sf::Color(255, 220, 80));
-    action.setPosition({ 40.f, y });
-    window.draw(action);
+        sf::Text action(*font);
+        action.setString(actionNames[i]);
+        action.setCharacterSize(11);
+        action.setFillColor(sf::Color(255, 220, 80));
+        action.setPosition({ 40.f, y });
+        window.draw(action);
 
-    // Key button box
-    sf::RectangleShape keyBox({ 120.f, 30.f });
-    if (isBeingRebound)
-        keyBox.setFillColor(sf::Color(80, 80, 180));      // blue = waiting for key
-    else if (isConflicting)
-        keyBox.setFillColor(sf::Color(180, 40, 40));      // red = conflict flash
-    else
-        keyBox.setFillColor(sf::Color(40, 40, 70));       // default dark
+        sf::RectangleShape keyBox({ 120.f, 30.f });
+        if (isBeingRebound)     keyBox.setFillColor(sf::Color(80,  80,  180));
+        else if (isConflicting) keyBox.setFillColor(sf::Color(180, 40,  40));
+        else                    keyBox.setFillColor(sf::Color(40,  40,  70));
+        keyBox.setOutlineThickness(1.f);
+        keyBox.setOutlineColor(isBeingRebound
+            ? sf::Color(150, 150, 255)
+            : isConflicting
+                ? sf::Color(255, 80, 80)
+                : sf::Color(80, 80, 120));
+        keyBox.setPosition({ gameWidth - 160.f, y - 4.f });
+        window.draw(keyBox);
 
-    keyBox.setOutlineThickness(1.f);
-    keyBox.setOutlineColor(isBeingRebound
-        ? sf::Color(150, 150, 255)
-        : isConflicting
-            ? sf::Color(255, 80, 80)
-            : sf::Color(80, 80, 120));
-    keyBox.setPosition({ gameWidth - 160.f, y - 4.f });
-    window.draw(keyBox);
-
-    // Key label
-    sf::Text keyLabel(*font);
-    keyLabel.setString(isBeingRebound
-        ? "PRESS KEY..."
-        : isConflicting
-            ? "TAKEN!"
-            : scancodeToString(currentKeys[i]));
-    keyLabel.setCharacterSize(10);
-    keyLabel.setFillColor(isBeingRebound || isConflicting
-        ? sf::Color(200, 200, 255)
-        : sf::Color::White);
-    auto kl = keyLabel.getLocalBounds();
-    keyLabel.setOrigin({ kl.size.x / 2.f, 0.f });
-    keyLabel.setPosition({ gameWidth - 100.f, y + 2.f });
-    window.draw(keyLabel);
-}
+        sf::Text keyLabel(*font);
+        keyLabel.setString(isBeingRebound
+            ? "PRESS KEY..."
+            : isConflicting
+                ? "TAKEN!"
+                : scancodeToString(currentKeys[i]));
+        keyLabel.setCharacterSize(10);
+        keyLabel.setFillColor(isBeingRebound || isConflicting
+            ? sf::Color(200, 200, 255)
+            : sf::Color::White);
+        auto kl = keyLabel.getLocalBounds();
+        keyLabel.setOrigin({ kl.size.x / 2.f, 0.f });
+        keyLabel.setPosition({ gameWidth - 100.f, y + 2.f });
+        window.draw(keyLabel);
+    }
 
     sf::RectangleShape div3({ gameWidth - 60.f, 2.f });
     div3.setFillColor(sf::Color(80, 80, 120));
     div3.setPosition({ 30.f, gameHeight - 90.f });
     window.draw(div3);
 
-    // ---- Back button ----
     sf::RectangleShape backBox({ 160.f, 40.f });
     backBox.setFillColor(sf::Color(30, 30, 60));
     backBox.setOutlineThickness(2.f);
@@ -667,3 +785,4 @@ bool MainMenu::isQuitButtonPressed(const sf::Vector2f& p) const     { return qui
 bool MainMenu::isRetryButtonPressed(const sf::Vector2f& p) const    { return retryButton.contains(p); }
 bool MainMenu::isMainMenuButtonPressed(const sf::Vector2f& p) const { return mainMenuButton.contains(p); }
 bool MainMenu::isSettingsButtonPressed(const sf::Vector2f& p) const { return settingsButton.contains(p); }
+bool MainMenu::isHighScoreButtonPressed(const sf::Vector2f& p) const { return highScoreButton.contains(p); }

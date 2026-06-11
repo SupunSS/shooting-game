@@ -5,7 +5,7 @@
 #include <iostream>
 
 Game::Game()
-    : window(sf::VideoMode({ static_cast<unsigned>(gameWidth), static_cast<unsigned>(gameHeight) }), "Space Shooter")
+    : window(sf::VideoMode::getDesktopMode(), "Space Shooter", sf::State::Fullscreen)
     , gameView(sf::FloatRect({ 0.f, 0.f }, { gameWidth, gameHeight }))
     , playerSprite(playerTexture) {
 
@@ -30,6 +30,8 @@ Game::Game()
     // Initialize and load menu
     mainMenu.initialize(gameWidth, gameHeight, &hudFont, hudFontValid);
     mainMenu.loadAssets();
+
+    scoreManager.load();
 
     updateView();
 

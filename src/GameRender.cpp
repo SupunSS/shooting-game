@@ -4,8 +4,7 @@
 
 float Game::getBackgroundScale(const sf::Texture& texture) const {
     sf::Vector2u textureSize = texture.getSize();
-    if (textureSize.x == 0)
-        return 1.f;
+    if (textureSize.x == 0) return 1.f;
     return gameWidth / static_cast<float>(textureSize.x);
 }
 
@@ -20,14 +19,12 @@ void Game::drawBackground() {
         if (backgroundTexturesValid[i])
             totalBackgroundHeight += getBackgroundHeight(backgroundTextures[i]);
 
-    if (totalBackgroundHeight <= 0.f)
-        return;
+    if (totalBackgroundHeight <= 0.f) return;
 
     float y = backgroundScrollOffset - totalBackgroundHeight;
     while (y < gameHeight) {
         for (int i = 0; i < backgroundCount && y < gameHeight; i++) {
-            if (!backgroundTexturesValid[i])
-                continue;
+            if (!backgroundTexturesValid[i]) continue;
 
             sf::Texture& texture = backgroundTextures[i];
             float scale  = getBackgroundScale(texture);
@@ -39,7 +36,6 @@ void Game::drawBackground() {
                 background.setPosition({ 0.f, y });
                 window.draw(background);
             }
-
             y += height;
         }
     }
@@ -84,9 +80,9 @@ void Game::drawGlowEnemyBullet(const EnemyBullet& b) {
     mid.setFillColor(sf::Color(255, 100, 100, 110));
     window.draw(mid, sf::BlendAdd);
 
-    if (enemyBulletTextureValid) {
+    if (enemyBulletTextureValid)
         window.draw(b.sprite);
-    } else {
+    else {
         sf::CircleShape core;
         core.setRadius(b.radius);
         core.setOrigin({ b.radius, b.radius });
@@ -114,7 +110,14 @@ void Game::render() {
         return;
     }
 
-    // ---- Game world — always drawn underneath overlays ----
+    // ---- High scores screen ----
+    if (gameState == GameState::HighScores) {
+        mainMenu.drawHighScores(window, scoreManager.getScores());
+        window.display();
+        return;
+    }
+
+    // ---- Game world ----
     drawBackground();
 
     for (auto& e : enemies)
@@ -150,7 +153,7 @@ void Game::render() {
 void Game::drawHUD() {
     // ---- Health icons (bottom left) ----
     for (int i = 0; i < 3; i++) {
-        float x    = healthHudX + i * (healthIconWidth + healthIconGap);
+        float x     = healthHudX + i * (healthIconWidth + healthIconGap);
         bool isFull = (i < playerHealth);
 
         sf::Texture& tex   = isFull ? healthFullTexture : healthDepletedTexture;
@@ -165,9 +168,9 @@ void Game::drawHUD() {
             icon.setPosition({ x, healthHudY });
             window.draw(icon);
         } else {
-            float fallbackRadius = std::min(healthIconWidth, healthIconHeight) / 2.f;
-            sf::CircleShape fallback(fallbackRadius);
-            fallback.setOrigin({ fallbackRadius, fallbackRadius });
+            float r = std::min(healthIconWidth, healthIconHeight) / 2.f;
+            sf::CircleShape fallback(r);
+            fallback.setOrigin({ r, r });
             fallback.setPosition({ x + healthIconWidth / 2.f,
                                    healthHudY + healthIconHeight / 2.f });
             fallback.setFillColor(isFull
@@ -177,24 +180,20 @@ void Game::drawHUD() {
         }
     }
 
-
-// ---- Score (bottom right) — text only, no icon ----
-if (hudFontValid) {
-    sf::Text scoreText(hudFont);
-    scoreText.setString("SCORE: " + std::to_string(score));
-    scoreText.setCharacterSize(18);
-    scoreText.setFillColor(sf::Color::White);
-    
-    // Right align it
-    auto bounds = scoreText.getLocalBounds();
-    scoreText.setOrigin({ bounds.size.x, 0.f });
-    scoreText.setPosition({ gameWidth - 10.f, healthHudY });
-    window.draw(scoreText);
-} else {
-    // Fallback rectangle if no font
-    sf::RectangleShape scoreBg({ 100.f, 24.f });
-    scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
-    scoreBg.setPosition({ gameWidth - 110.f, healthHudY });
-    window.draw(scoreBg);
-}
+    // ---- Score (bottom right) ----
+    if (hudFontValid) {
+        sf::Text scoreText(hudFont);
+        scoreText.setString("SCORE: " + std::to_string(score));
+        scoreText.setCharacterSize(18);
+        scoreText.setFillColor(sf::Color::White);
+        auto bounds = scoreText.getLocalBounds();
+        scoreText.setOrigin({ bounds.size.x, 0.f });
+        scoreText.setPosition({ gameWidth - 10.f, healthHudY });
+        window.draw(scoreText);
+    } else {
+        sf::RectangleShape scoreBg({ 100.f, 24.f });
+        scoreBg.setFillColor(sf::Color(0, 0, 0, 160));
+        scoreBg.setPosition({ gameWidth - 110.f, healthHudY });
+        window.draw(scoreBg);
+    }
 }

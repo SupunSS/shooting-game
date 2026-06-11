@@ -171,6 +171,7 @@ void Game::update(float dt) {
         gameState  = GameState::GameOver;
         bullets.clear();
         enemyBullets.clear();
+        scoreManager.addScore(finalScore); 
         std::cout << "[Info] Game Over! Final score: " << finalScore << "\n";
     }
 }

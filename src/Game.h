@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "MainMenu.h"
+#include "ScoreManager.h"
 
 struct Bullet {
     sf::CircleShape shape;
@@ -152,4 +153,7 @@ private:
 
     // Game over
     int finalScore = 0;
+
+    //score manager
+    ScoreManager scoreManager;
 };
