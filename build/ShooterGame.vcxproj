@@ -456,6 +456,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="D:\Projects\shooting game\src\EnemyAI.cpp" />
     <ClCompile Include="D:\Projects\shooting game\src\Game.cpp" />
     <ClCompile Include="D:\Projects\shooting game\src\GameAssets.cpp" />
     <ClCompile Include="D:\Projects\shooting game\src\GameEnemies.cpp" />

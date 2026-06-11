@@ -3,6 +3,7 @@
 #include <vector>
 #include "MainMenu.h"
 #include "ScoreManager.h"
+#include "EnemyAI.h"
 
 struct Bullet {
     sf::CircleShape shape;
@@ -25,6 +26,8 @@ struct Enemy {
         : sprite(texture)
         , textureIndex(index) {}
 
+    EnemyAIState aiState;
+
     sf::Sprite  sprite;
     int         textureIndex = 0;
     float       speedX        = 120.f;
@@ -40,6 +43,8 @@ struct Enemy {
     bool        reachedBase   = false;
     float       radius        = 18.f;
     bool        dead          = false;
+    int         health        = 1;
+    int         maxHealth     = 1;
 };
 
 class Game {
@@ -67,13 +72,16 @@ private:
     void drawHUD();
     void resetGame();
 
+    void toggleFullscreen();
+    bool isFullscreen = false;
+
     float getBackgroundScale(const sf::Texture& texture) const;
     float getBackgroundHeight(const sf::Texture& texture) const;
     bool circlesOverlap(sf::Vector2f posA, float rA, sf::Vector2f posB, float rB) const;
     void checkCollisions();
 
-    static constexpr float gameWidth   = 480.f;
-    static constexpr float gameHeight  = 640.f;
+    static constexpr float gameWidth       = 480.f;
+    static constexpr float gameHeight      = 640.f;
     static constexpr int   backgroundCount = 3;
     static constexpr int   scorePerKill    = 10;
 
@@ -154,6 +162,10 @@ private:
     // Game over
     int finalScore = 0;
 
-    //score manager
+    // Score manager
     ScoreManager scoreManager;
+
+    // Wave / AI tracking
+    int          currentWave   = 0;
+    sf::Vector2f lastPlayerPos = { gameWidth / 2.f, gameHeight - 60.f };
 };

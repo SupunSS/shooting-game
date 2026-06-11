@@ -32,7 +32,6 @@ void Game::spawnEnemy() {
         e.sprite.setScale({ 0.5f, -0.5f });
     }
 
-    // Use half the scaled size as radius for clamping.
     e.radius = (std::max(w, h) * 0.5f) / 2.f;
 
     float x = static_cast<float>(std::rand() % static_cast<int>(gameWidth - 60.f) + 30);
@@ -46,7 +45,27 @@ void Game::spawnEnemy() {
     e.baseY         = 80.f  + static_cast<float>(std::rand() % static_cast<int>(waveBoundaryY - 100.f));
     e.shootInterval = 1.5f  + static_cast<float>(std::rand() % 20) / 10.f;
 
+    // ---- Assign health per enemy type ----
+    // Index 0 = green small   → 2 hits
+    // Index 1 = green large   → 3 hits
+    // Index 2 = purple small  → 2 hits
+    // Index 3 = purple large  → 3 hits
+    // Index 4 = red large     → 5 hits
+    switch (e.textureIndex) {
+        case 4:  e.health = 5; break;
+        case 1:
+        case 3:  e.health = 3; break;
+        default: e.health = 2; break;
+    }
+    e.maxHealth = e.health;
+
     enemies.push_back(e);
-    std::cout << "[Info] Enemy spawned (type " << e.textureIndex << ") at x=" << x
-              << " baseY=" << e.baseY << "\n";
+
+    // Initialise AI for this enemy using the current wave number
+    EnemyAI::initialize(enemies.back().aiState, currentWave, e.textureIndex);
+
+    std::cout << "[Info] Enemy spawned (type " << e.textureIndex
+              << ", hp=" << e.health
+              << ", ai_level=" << static_cast<int>(enemies.back().aiState.level)
+              << ") at x=" << x << " baseY=" << e.baseY << "\n";
 }

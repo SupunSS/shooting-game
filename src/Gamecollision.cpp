@@ -26,10 +26,29 @@ void Game::checkCollisions() {
             if (e.dead) continue;
 
             if (circlesOverlap(bPos, bR, e.sprite.getPosition(), e.radius)) {
-                b.dead  = true;
-                e.dead  = true;
-                score  += scorePerKill;
-                std::cout << "[Info] Enemy killed! Score: " << score << "\n";
+                b.dead = true;
+                e.health--;
+
+                if (e.health <= 0) {
+                    // Enemy dead — score depends on type
+                    // type 0 (red) = 50, type 1 (large green/purple) = 30, type 2/3/4 = 20
+                    e.dead = true;
+                    int points = (e.textureIndex == 0) ? 50 :
+                                 (e.textureIndex == 1) ? 30 : 20;
+                    score += points;
+                    e.sprite.setColor(sf::Color::White);
+                    std::cout << "[Info] Enemy killed (type " << e.textureIndex
+                              << ") +" << points << " Score: " << score << "\n";
+                } else {
+                    // Still alive — tint red proportional to damage taken
+                    float ratio = static_cast<float>(e.health) /
+                                  static_cast<float>(e.maxHealth);
+                    uint8_t g  = static_cast<uint8_t>(255.f * ratio);
+                    uint8_t b2 = g;
+                    e.sprite.setColor(sf::Color(255, g, b2));
+                    std::cout << "[Info] Enemy hit (type " << e.textureIndex
+                              << ") hp=" << e.health << "/" << e.maxHealth << "\n";
+                }
                 break;
             }
         }

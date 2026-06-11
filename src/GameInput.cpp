@@ -97,6 +97,12 @@ void Game::processEvents() {
         // ---- Keyboard ----
         if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
 
+            // ADDED: F11 toggles fullscreen / windowed (works in any game state)
+            if (keyPressed->scancode == sf::Keyboard::Scancode::F11) {
+                toggleFullscreen();
+                continue;
+            }
+
             // If rebinding — capture the key
             if (mainMenu.isRebinding()) {
                 mainMenu.applyRebind(keyPressed->scancode);

@@ -1,11 +1,20 @@
 ================================================================================
 Linker Errors
-Generated: 2026-06-01T05:11:02.324Z
-Total Errors: 2
+Generated: 2026-06-11T08:34:45.189Z
+Total Errors: 5
 ================================================================================
 
 [LNK2019] (MSVC)
-unresolved external symbol "private: void __cdecl Game::updateBackground(float)" (?updateBackground@Game@@AEAAXM@Z) referenced in function "private: void __cdecl Game::update(float)" (?update@Game@@AEAAXM@Z) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+unresolved external symbol "public: static void __cdecl EnemyAI::initialize(struct EnemyAIState &,int,int)" (?initialize@EnemyAI@@SAXAEAUEnemyAIState@@HH@Z) referenced in function "private: void __cdecl Game::spawnEnemy(void)" (?spawnEnemy@Game@@AEAAXXZ) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK2019] (MSVC)
+unresolved external symbol "public: static class sf::Vector2<float> __cdecl EnemyAI::update(struct EnemyAIState &,class sf::Vector2<float> const &,struct PlayerState const &,float)" (?update@EnemyAI@@SA?AV?$Vector2@M@sf@@AEAUEnemyAIState@@AEBV23@AEBUPlayerState@@M@Z) referenced in function "private: void __cdecl Game::update(float)" (?update@Game@@AEAAXM@Z) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK2019] (MSVC)
+unresolved external symbol "public: static bool __cdecl EnemyAI::wantsToShoot(struct EnemyAIState &,class sf::Vector2<float> const &,struct PlayerState const &,class sf::Vector2<float> &)" (?wantsToShoot@EnemyAI@@SA_NAEAUEnemyAIState@@AEBV?$Vector2@M@sf@@AEBUPlayerState@@AEAV34@@Z) referenced in function "private: void __cdecl Game::update(float)" (?update@Game@@AEAAXM@Z) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+
+[LNK2019] (MSVC)
+unresolved external symbol "public: static enum AILevel __cdecl EnemyAI::levelForWave(int)" (?levelForWave@EnemyAI@@SA?AW4AILevel@@H@Z) referenced in function "private: void __cdecl Game::update(float)" (?update@Game@@AEAAXM@Z) [D:\Projects\shooting game\build\ShooterGame.vcxproj]
 
 [LNK1120] (MSVC)
-1 unresolved externals [D:\Projects\shooting game\build\ShooterGame.vcxproj]
+4 unresolved externals [D:\Projects\shooting game\build\ShooterGame.vcxproj]

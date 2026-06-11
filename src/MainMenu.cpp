@@ -48,102 +48,113 @@ void MainMenu::loadAssets() {
     }
 
     // ---- Play button ----
+    // CHANGED: size 200x80 -> 260x104, scale 0.8 -> 1.1, Y pos -100 -> -130
     if (std::filesystem::exists("assets/Menu/play_button.png") &&
         playButtonTexture.loadFromFile("assets/Menu/play_button.png")) {
         playButtonTexture.setSmooth(true);
         playButtonValid = true;
         playButton.sprite   = new sf::Sprite(playButtonTexture);
-        playButton.position = { gameWidth / 2.f, gameHeight / 2.f - 100.f };
-        playButton.size     = { 200.f, 80.f };
+        playButton.position = { gameWidth / 2.f, gameHeight / 2.f - 130.f };
+        playButton.size     = { 260.f, 104.f };
         playButton.sprite->setOrigin({
             playButtonTexture.getSize().x / 2.f,
             playButtonTexture.getSize().y / 2.f });
         playButton.sprite->setPosition(playButton.position);
-        playButton.sprite->setScale({ 0.8f, 0.8f });
+        playButton.sprite->setScale({ 1.1f, 1.1f });
         std::cout << "[Info] Loaded play_button.png\n";
     }
 
     // ---- Settings button ----
+    // CHANGED: size 200x80 -> 260x104, scale 0.8 -> 1.1, Y unchanged (centre)
     if (std::filesystem::exists("assets/Menu/settings_button.png") &&
         settingsButtonTexture.loadFromFile("assets/Menu/settings_button.png")) {
         settingsButtonTexture.setSmooth(true);
         settingsButtonValid = true;
         settingsButton.sprite   = new sf::Sprite(settingsButtonTexture);
         settingsButton.position = { gameWidth / 2.f, gameHeight / 2.f };
-        settingsButton.size     = { 200.f, 80.f };
+        settingsButton.size     = { 260.f, 104.f };
         settingsButton.sprite->setOrigin({
             settingsButtonTexture.getSize().x / 2.f,
             settingsButtonTexture.getSize().y / 2.f });
         settingsButton.sprite->setPosition(settingsButton.position);
-        settingsButton.sprite->setScale({ 0.8f, 0.8f });
+        settingsButton.sprite->setScale({ 1.1f, 1.1f });
         std::cout << "[Info] Loaded settings_button.png\n";
     }
 
     // ---- High score button ----
+    // FIX: scale derived from target pixel width (220px) so it always matches
+    // the other buttons visually, regardless of the source texture's own size.
     if (std::filesystem::exists("assets/Menu/High score.png") &&
         highScoreButtonTexture.loadFromFile("assets/Menu/High score.png")) {
         highScoreButtonTexture.setSmooth(true);
         highScoreButtonValid = true;
         highScoreButton.sprite   = new sf::Sprite(highScoreButtonTexture);
-        highScoreButton.position = { gameWidth / 2.f, gameHeight / 2.f + 100.f };
-        highScoreButton.size     = { 200.f, 80.f };
+        highScoreButton.position = { gameWidth / 2.f, gameHeight / 2.f + 130.f };
+        highScoreButton.size     = { 220.f, 50.f };
         highScoreButton.sprite->setOrigin({
             highScoreButtonTexture.getSize().x / 2.f,
             highScoreButtonTexture.getSize().y / 2.f });
         highScoreButton.sprite->setPosition(highScoreButton.position);
-        highScoreButton.sprite->setScale({ 0.8f, 0.8f });
+        // 1049px source texture scaled to 220px rendered width —
+        // matches other buttons (200px texture * 1.1 = 220px).
+        const float targetW  = 220.f;
+        const float hsScale  = targetW / static_cast<float>(highScoreButtonTexture.getSize().x);
+        highScoreButton.sprite->setScale({ hsScale, hsScale });
         std::cout << "[Info] Loaded High score.png\n";
     }
 
     // ---- Quit button ----
+    // CHANGED: size 200x80 -> 260x104, scale 0.8 -> 1.1, Y pos +200 -> +260
     if (std::filesystem::exists("assets/Menu/quit_button.png") &&
         quitButtonTexture.loadFromFile("assets/Menu/quit_button.png")) {
         quitButtonTexture.setSmooth(true);
         quitButtonValid = true;
         quitButton.sprite   = new sf::Sprite(quitButtonTexture);
-        quitButton.position = { gameWidth / 2.f, gameHeight / 2.f + 200.f };
-        quitButton.size     = { 200.f, 80.f };
+        quitButton.position = { gameWidth / 2.f, gameHeight / 2.f + 260.f };
+        quitButton.size     = { 260.f, 104.f };
         quitButton.sprite->setOrigin({
             quitButtonTexture.getSize().x / 2.f,
             quitButtonTexture.getSize().y / 2.f });
         quitButton.sprite->setPosition(quitButton.position);
-        quitButton.sprite->setScale({ 0.8f, 0.8f });
+        quitButton.sprite->setScale({ 1.1f, 1.1f });
         std::cout << "[Info] Loaded quit_button.png\n";
     }
 
     // ---- Retry button ----
+    // CHANGED: size 160x70 -> 200x88, scale 0.75 -> 0.95
     if (std::filesystem::exists("assets/Menu/retry_button.png") &&
         retryButtonTexture.loadFromFile("assets/Menu/retry_button.png")) {
         retryButtonTexture.setSmooth(true);
         retryButtonValid = true;
         retryButton.sprite   = new sf::Sprite(retryButtonTexture);
-        retryButton.position = { gameWidth / 2.f - 80.f, gameHeight / 2.f + 120.f };
-        retryButton.size     = { 160.f, 70.f };
+        retryButton.position = { gameWidth / 2.f - 90.f, gameHeight / 2.f + 120.f };
+        retryButton.size     = { 200.f, 88.f };
         retryButton.sprite->setOrigin({
             retryButtonTexture.getSize().x / 2.f,
             retryButtonTexture.getSize().y / 2.f });
         retryButton.sprite->setPosition(retryButton.position);
-        retryButton.sprite->setScale({ 0.75f, 0.75f });
+        retryButton.sprite->setScale({ 0.95f, 0.95f });
         std::cout << "[Info] Loaded retry_button.png\n";
     }
 
     // ---- Main menu button ----
+    // CHANGED: size 160x70 -> 200x88, scale 0.75 -> 0.95
     if (std::filesystem::exists("assets/Menu/main_menu_button.png") &&
         mainMenuButtonTexture.loadFromFile("assets/Menu/main_menu_button.png")) {
         mainMenuButtonTexture.setSmooth(true);
         mainMenuButtonValid = true;
         mainMenuButton.sprite   = new sf::Sprite(mainMenuButtonTexture);
-        mainMenuButton.position = { gameWidth / 2.f + 80.f, gameHeight / 2.f + 120.f };
-        mainMenuButton.size     = { 160.f, 70.f };
+        mainMenuButton.position = { gameWidth / 2.f + 90.f, gameHeight / 2.f + 120.f };
+        mainMenuButton.size     = { 200.f, 88.f };
         mainMenuButton.sprite->setOrigin({
             mainMenuButtonTexture.getSize().x / 2.f,
             mainMenuButtonTexture.getSize().y / 2.f });
         mainMenuButton.sprite->setPosition(mainMenuButton.position);
-        mainMenuButton.sprite->setScale({ 0.75f, 0.75f });
+        mainMenuButton.sprite->setScale({ 0.95f, 0.95f });
         std::cout << "[Info] Loaded main_menu_button.png\n";
     }
 
-    // ---- Pause button ----
+    // ---- Pause button ---- (kept small — it's an in-game icon, not a menu button)
     if (std::filesystem::exists("assets/Menu/Paush_button.png") &&
         pauseButtonTexture.loadFromFile("assets/Menu/Paush_button.png")) {
         pauseButtonTexture.setSmooth(true);
@@ -171,18 +182,19 @@ void MainMenu::loadAssets() {
     }
 
     // ---- Resume button ----
+    // CHANGED: size 200x80 -> 260x104, scale 0.8 -> 1.1
     if (std::filesystem::exists("assets/Menu/resume_button.png") &&
         resumeButtonTexture.loadFromFile("assets/Menu/resume_button.png")) {
         resumeButtonTexture.setSmooth(true);
         resumeButtonValid = true;
         resumeButton.sprite   = new sf::Sprite(resumeButtonTexture);
         resumeButton.position = { gameWidth / 2.f, gameHeight / 2.f };
-        resumeButton.size     = { 200.f, 80.f };
+        resumeButton.size     = { 260.f, 104.f };
         resumeButton.sprite->setOrigin({
             resumeButtonTexture.getSize().x / 2.f,
             resumeButtonTexture.getSize().y / 2.f });
         resumeButton.sprite->setPosition(resumeButton.position);
-        resumeButton.sprite->setScale({ 0.8f, 0.8f });
+        resumeButton.sprite->setScale({ 1.1f, 1.1f });
         std::cout << "[Info] Loaded resume_button.png\n";
     }
 
@@ -274,20 +286,24 @@ void MainMenu::drawMainMenu(sf::RenderWindow& window) {
         window.draw(nameSprite);
     }
 
+    // CHANGED: updateScale calls updated to match new base scales
     if (playButtonValid && playButton.sprite) {
-        playButton.updateScale(0.8f);
+        playButton.updateScale(1.1f);
         window.draw(*playButton.sprite);
     }
     if (settingsButtonValid && settingsButton.sprite) {
-        settingsButton.updateScale(0.8f);
+        settingsButton.updateScale(1.1f);
         window.draw(*settingsButton.sprite);
     }
     if (highScoreButtonValid && highScoreButton.sprite) {
-        highScoreButton.updateScale(0.8f);
+        // Use the same target-width scale computed in loadAssets
+        const float targetW = 180.f;
+        const float hsScale = targetW / static_cast<float>(highScoreButtonTexture.getSize().x);
+        highScoreButton.updateScale(hsScale);
         window.draw(*highScoreButton.sprite);
     }
     if (quitButtonValid && quitButton.sprite) {
-        quitButton.updateScale(0.8f);
+        quitButton.updateScale(1.1f);
         window.draw(*quitButton.sprite);
     }
 }
@@ -336,14 +352,14 @@ void MainMenu::drawPauseOverlay(sf::RenderWindow& window, int currentScore) {
     }
 
     if (resumeButtonValid && resumeButton.sprite) {
-        resumeButton.updateScale(0.8f);
+        resumeButton.updateScale(1.1f);   // CHANGED from 0.8f
         window.draw(*resumeButton.sprite);
     }
 
     if (mainMenuButtonValid && mainMenuButton.sprite) {
-        mainMenuButton.position = { gameWidth / 2.f, gameHeight / 2.f + 100.f };
+        mainMenuButton.position = { gameWidth / 2.f, gameHeight / 2.f + 120.f };
         mainMenuButton.sprite->setPosition(mainMenuButton.position);
-        mainMenuButton.updateScale(0.75f);
+        mainMenuButton.updateScale(0.95f);  // CHANGED from 0.75f
         window.draw(*mainMenuButton.sprite);
     }
 }
@@ -375,14 +391,14 @@ void MainMenu::drawGameOver(sf::RenderWindow& window, int finalScore) {
     drawScore(window, finalScore);
 
     if (retryButtonValid && retryButton.sprite) {
-        retryButton.updateScale(0.75f);
+        retryButton.updateScale(0.95f);   // CHANGED from 0.75f
         window.draw(*retryButton.sprite);
     }
 
     if (mainMenuButtonValid && mainMenuButton.sprite) {
-        mainMenuButton.position = { gameWidth / 2.f + 80.f, gameHeight / 2.f + 120.f };
+        mainMenuButton.position = { gameWidth / 2.f + 90.f, gameHeight / 2.f + 120.f };
         mainMenuButton.sprite->setPosition(mainMenuButton.position);
-        mainMenuButton.updateScale(0.75f);
+        mainMenuButton.updateScale(0.95f);  // CHANGED from 0.75f
         window.draw(*mainMenuButton.sprite);
     }
 }
